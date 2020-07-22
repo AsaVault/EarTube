@@ -8,6 +8,8 @@ using EarTube.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 
 namespace EarTube.Controllers
 {
@@ -29,6 +31,8 @@ namespace EarTube.Controllers
 
             return View(data);
         }
+
+        // Get - AddNewSong
         public  ViewResult AddNewSong(bool isSuccess = false, int songId = 0)
         {
             var model = new SongModel();
@@ -54,8 +58,10 @@ namespace EarTube.Controllers
 
                 if (songModel.SongFile != null)
                 {
-                    string folder = "songs/songfiles/";
-                    songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                    
+                        string folder = "songs/songfiles/";
+                        songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                    
                 }
 
                 int id = await _songRepository.AddNewSong(songModel);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EarTube.MyValidator;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,6 +29,8 @@ namespace EarTube.Models
 
         public List< CommentModel> Comment { get; set; }
 
+        [MyUploadFileSizeValidator(sizeInBytes: 5 * 1024 * 1024,
+                               ErrorMessage = "Image filesize should be smaller than 5 MB")]
         [Display(Name = "Upload your song in digital format")]
         [Required]
         public IFormFile SongFile { get; set; }

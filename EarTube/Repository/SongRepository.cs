@@ -1,6 +1,8 @@
 ﻿using EarTube.Data;
 using EarTube.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace EarTube.Repository
 {
     public class SongRepository
     {
+
         private readonly ApplicationDbContext _db;
         public SongRepository(ApplicationDbContext db)
         {
