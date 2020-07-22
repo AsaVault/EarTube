@@ -3,3 +3,6 @@
 ################################################################################
 
 /EarTube/bin/Debug/netcoreapp3.1
+/EarTube/obj
+/.vs/EarTube
+/EarTube/wwwroot/songs
