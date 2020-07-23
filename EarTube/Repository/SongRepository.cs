@@ -53,6 +53,39 @@ namespace EarTube.Repository
 
         }
 
+        public async Task<int> EditSong(SongModel model)
+        {
+            var newSong = new Song()
+            {
+                Title = model.Title,
+                Artist = model.Artist,
+                Genre = model.Genre,
+                UpdatedOn = DateTime.UtcNow,
+                Description = model.Description,
+                Id = model.Id,
+                Like = model.Like,
+                SongUrl = model.SongUrl,
+                CoverImageUrl = model.CoverImageUrl
+            };
+
+            newSong.Comment = new List<Comment>();
+
+            foreach (var comment in model.Comment)
+            {
+                newSong.Comment.Add(new Comment()
+                {
+                    Title = comment.Title,
+                    Description = comment.Description
+                });
+            }
+
+             _db.Song.Update(newSong);
+            await _db.SaveChangesAsync();
+
+            return newSong.Id;
+
+        }
+
         public async Task<List<SongModel>> GetAllSongs()
         {
             return await _db.Song
@@ -70,9 +103,8 @@ namespace EarTube.Repository
         }
 
         //Still needed some touch
-        public async Task<SongModel> GetSongById(int id)
+        public async Task<SongModel> GetSongById(int? id)
         {
-            var com = _db.Song;
             
             return await _db.Song.Where(x => x.Id == id)
                  .Select(song => new SongModel()
@@ -95,6 +127,7 @@ namespace EarTube.Repository
 
         }
 
+        
         public List<SongModel> SearchBook(string title, string authorName)
         {
             return null;

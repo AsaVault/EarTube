@@ -74,6 +74,65 @@ namespace EarTube.Controllers
             return View();
         }
 
+        [Route("song-details/{id}", Name = "songDetails")]
+        public async Task<ViewResult> GetSong(int id)
+        {
+            var data = await _songRepository.GetSongById(id);
+
+            return View(data);
+        }
+
+        [Route("edit-song/{id}", Name = "editSong")]
+        public async Task<IActionResult> EditSong(int? id, bool isSuccess = false)
+        {
+            ViewBag.IsSuccess = isSuccess;
+            ViewBag.SongId = id;
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var data = await _songRepository.GetSongById(id);
+            if(data == null)
+            {
+                return NotFound();
+            }
+
+            return View(data);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSong(SongModel songModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (songModel.CoverPhoto != null)
+                {
+                    string folder = "songs/cover/";
+                    songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                }
+
+
+
+                if (songModel.SongFile != null)
+                {
+
+                    string folder = "songs/songfiles/";
+                    songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+
+                }
+
+                int id = await _songRepository.EditSong(songModel);
+                if (id > 0)
+                {
+                    return RedirectToAction(nameof(EditSong), new { isSuccess = true, songId = id });
+                }
+            }
+
+            return View();
+        }
+
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {
 
