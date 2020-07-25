@@ -18,6 +18,8 @@ namespace EarTube.Models
         public string Artist { get; set; }
         public string Genre { get; set; }
         public string Like { get; set; }
+
+        public int SongLike { get; set; }
         [StringLength(500)]
         public string Description { get; set; }
         //[Required(ErrorMessage = "Please choose the language of your book")]

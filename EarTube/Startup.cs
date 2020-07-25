@@ -63,7 +63,7 @@ namespace EarTube
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Song}/{action=GetAllSongs}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

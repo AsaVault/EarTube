@@ -20,6 +20,7 @@ namespace EarTube.Data
         public DbSet<Song> Song { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<News> News { get; set; }
+        //public DbSet<Likes> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

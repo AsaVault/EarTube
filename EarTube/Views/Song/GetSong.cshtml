@@ -50,13 +50,25 @@
 
 
                 </div>
+                <div class="row my-1">
+                    <div class="col-md-10">
+                        @foreach (var comment in Model.Comment)
+                        {
+                            if (string.IsNullOrWhiteSpace(comment.Description))
+                            {
+                                <h6 id="comment" class="text-muted">No Comments</h6>
+                            }
+                            else
+                            {
+                                <h6 asp-for="@comment.Title" class="control-label"></h6>
+                                <p asp-for="@comment.Description" class="form-control"></p>
+                            }
 
+                        }
+                    </div>
+                </div>
                 <hr />
 
-                <ul class="list-group">
-                    <li class="list-group-item"><span class="font-weight-bold">Category - </span> @Model.Genre</li>
-                    <li class="list-group-item"><span class="font-weight-bold">Likes - </span> @Model.Like</li>
-                </ul>
             </div>
         </div>
 

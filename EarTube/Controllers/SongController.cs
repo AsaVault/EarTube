@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EarTube.Models;
 using EarTube.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace EarTube.Controllers
 {
+    [Authorize]
     public class SongController : Controller
     {
         private readonly SongRepository _songRepository = null;
@@ -26,6 +28,7 @@ namespace EarTube.Controllers
         }
 
         public async Task<ViewResult> GetAllSongs()
+
         {
             var data = await _songRepository.GetAllSongs();
 
@@ -33,7 +36,7 @@ namespace EarTube.Controllers
         }
 
         // Get - AddNewSong
-        public  ViewResult AddNewSong(bool isSuccess = false, int songId = 0)
+        public ViewResult AddNewSong(bool isSuccess = false, int songId = 0)
         {
             var model = new SongModel();
 
@@ -54,14 +57,14 @@ namespace EarTube.Controllers
                     songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
                 }
 
-                
+
 
                 if (songModel.SongFile != null)
                 {
-                    
-                        string folder = "songs/songfiles/";
-                        songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
-                    
+
+                    string folder = "songs/songfiles/";
+                    songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+
                 }
 
                 int id = await _songRepository.AddNewSong(songModel);
@@ -93,7 +96,7 @@ namespace EarTube.Controllers
                 return NotFound();
             }
             var data = await _songRepository.GetSongById(id);
-            if(data == null)
+            if (data == null)
             {
                 return NotFound();
             }
@@ -131,6 +134,52 @@ namespace EarTube.Controllers
             }
 
             return View();
+        }
+
+        [Route("delete-song/{id}", Name = "deleteSong")]
+
+        public async Task<IActionResult> DeleteSong(int? id, bool isSuccess = false)
+        {
+            ViewBag.IsSuccess = isSuccess;
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+
+            int removeSong = await _songRepository.DeleteSong(data);
+            if (removeSong > 0)
+            {
+                return RedirectToAction(nameof(GetAllSongs), new { isSuccess = true });
+            }
+
+
+            return NotFound();
+        }
+
+        [Route("like-song/{id}", Name = "likeSong")]
+
+        public async Task<IActionResult> LikeSong(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+
+
+            int likeSong = await _songRepository.LikeSong(data);
+            data.SongLike += 1; 
+            if (likeSong > 0)
+            {
+                return RedirectToAction(nameof(GetAllSongs));
+            }
+
+
+            return NotFound();  
         }
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)

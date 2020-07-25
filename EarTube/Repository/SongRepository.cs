@@ -19,6 +19,22 @@ namespace EarTube.Repository
             _db = db;
         }
 
+        public async Task<List<SongModel>> GetAllSongs()
+        {
+            return await _db.Song
+                  .Select(song => new SongModel()
+                  {
+                      Title = song.Title,
+                      Artist = song.Artist,
+                      Genre = song.Genre,
+                      Description = song.Description,
+                      Id = song.Id,
+                      Like = song.Like,
+                      SongUrl = song.SongUrl,
+                      CoverImageUrl = song.CoverImageUrl
+                  }).ToListAsync();
+        }
+
         public async Task<int> AddNewSong(SongModel model)
         {
             var newSong = new Song()
@@ -86,21 +102,56 @@ namespace EarTube.Repository
 
         }
 
-        public async Task<List<SongModel>> GetAllSongs()
+        public async Task<int> DeleteSong(SongModel model)
         {
-            return await _db.Song
-                  .Select(song => new SongModel()
-                  {
-                      Title = song.Title,
-                      Artist = song.Artist,
-                      Genre = song.Genre,
-                      Description = song.Description,
-                      Id = song.Id,
-                      Like = song.Like,
-                      SongUrl = song.SongUrl,
-                      CoverImageUrl = song.CoverImageUrl
-                  }).ToListAsync();
+            var newSong = new Song()
+            {
+                Title = model.Title,
+                Artist = model.Artist,
+                Genre = model.Genre,
+                UpdatedOn = DateTime.UtcNow,
+                Description = model.Description,
+                Id = model.Id,
+                Like = model.Like,
+                SongUrl = model.SongUrl,
+                CoverImageUrl = model.CoverImageUrl
+            };
+
+            _db.Song.Remove(newSong);
+            await _db.SaveChangesAsync();
+
+            return newSong.Id;
+
         }
+
+        public async Task<int> LikeSong(SongModel model)
+        {
+            
+
+            var newSong = new Song()
+            {
+                Title = model.Title,
+                Artist = model.Artist,
+                Genre = model.Genre,
+                UpdatedOn = DateTime.UtcNow,
+                Description = model.Description,
+                Id = model.Id,
+                Like = model.Like,
+                SongUrl = model.SongUrl,
+                CoverImageUrl = model.CoverImageUrl,
+                SongLike = model.SongLike
+            };
+
+            model.SongLike += 1;
+            newSong.SongLike = model.SongLike;
+
+            _db.Song.Update(newSong);
+            await _db.SaveChangesAsync();
+            return newSong.Id;
+        }
+
+
+
 
         //Still needed some touch
         public async Task<SongModel> GetSongById(int? id)

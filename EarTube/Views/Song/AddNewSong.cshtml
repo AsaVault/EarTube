@@ -5,73 +5,89 @@
 
 
 <div class="container">
-    <h3 class="display-4">Upload new Song</h3>
-    <hr />
-    @if (ViewBag.IsSuccess == true)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Congratulations</strong> You have added new song successfully. <br />
-            Click <a asp-controller="Song" asp-action="GetSong" asp-route-id="@ViewBag.">here</a> to view the details
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
+    <div class="row">
+        <div class="col-md-10">
+            <h3 class="display-4">Upload new Song</h3>
+            <hr />
+            @if (ViewBag.IsSuccess == true)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Congratulations</strong> You have added new song successfully. <br />
+                    Click <a asp-controller="Song" asp-action="GetSong" asp-route-id="@ViewBag.">here</a> to view the details
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
 
-    <form method="post" enctype="multipart/form-data" asp-action="AddNewSong" asp-controller="Song">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form method="post" enctype="multipart/form-data" asp-action="AddNewSong" asp-controller="Song">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <label asp-for="Title" class="control-label"></label>
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Artist" class="control-label"></label>
-            <input asp-for="Artist" class="form-control" />
-            <span asp-validation-for="Artist" class="text-danger"></span>
-        </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Artist" class="control-label"></label>
+                            <input asp-for="Artist" class="form-control" />
+                            <span asp-validation-for="Artist" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="Genre" class="control-label"></label>
-            <input asp-for="Genre" class="form-control" />
-            <span asp-validation-for="Genre" class="text-danger"></span>
-        </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Genre" class="control-label"></label>
+                            <input asp-for="Genre" class="form-control" />
+                            <span asp-validation-for="Genre" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="CoverPhoto" class="control-label"></label>
-            <div class="custom-file">
-                <input asp-for="CoverPhoto" class="custom-file-input" id="customFile">
-                <label class="custom-file-label text-dark" for="customFile">Choose file</label>
-            </div>
-            <span asp-validation-for="CoverPhoto" class="text-danger"></span>
-        </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CoverPhoto" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="CoverPhoto" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label text-dark" for="customFile">Choose file</label>
+                            </div>
+                            <span asp-validation-for="CoverPhoto" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="SongFile" class="control-label"></label>
-            <div class="custom-file">
-                <input asp-for="SongFile" class="custom-file-input" id="validatedCustomFile" required>
-                <label class="custom-file-label text-dark" for="validatedCustomFile">Choose file</label>
-            </div>
-            <span asp-validation-for="SongFile" class="text-danger"></span>
-        </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="SongFile" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="SongFile" class="custom-file-input" id="validatedCustomFile" required>
+                                <label class="custom-file-label text-dark" for="validatedCustomFile">Choose file</label>
+                            </div>
+                            <span asp-validation-for="SongFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Comment" class="control-label"></label>
+                    <textarea asp-for="Comment" class="form-control"></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Comment" class="control-label"></label>
-            <textarea asp-for="Comment" class="form-control"></textarea>
-            <span asp-validation-for="Comment" class="text-danger"></span>
+                <div class="form-group">
+                    <input type="submit" value="Upload" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
-
-        <div class="form-group">
-            <input type="submit" value="Upload" class="btn btn-primary" />
-        </div>
-    </form>
+    </div>
 </div>
+
 
