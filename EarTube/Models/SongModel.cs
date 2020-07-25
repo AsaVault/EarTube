@@ -18,7 +18,7 @@ namespace EarTube.Models
         public string Artist { get; set; }
         public string Genre { get; set; }
         public string Like { get; set; }
-
+        private const  int size  = 5;
         public int SongLike { get; set; }
         [StringLength(500)]
         public string Description { get; set; }
@@ -31,11 +31,13 @@ namespace EarTube.Models
 
         public List< CommentModel> Comment { get; set; }
 
-        [MyUploadFileSizeValidator(sizeInBytes: 5 * 1024 * 1024,
+        [MyUploadFileSizeValidator(sizeInBytes: size * 1024 * 1024,
                                ErrorMessage = "Image filesize should be smaller than 5 MB")]
         [Display(Name = "Upload your song in digital format")]
         [Required]
         public IFormFile SongFile { get; set; }
         public string SongUrl { get; set; }
+
+
     }
 }

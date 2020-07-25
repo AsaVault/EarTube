@@ -31,7 +31,8 @@ namespace EarTube.Repository
                       Id = song.Id,
                       Like = song.Like,
                       SongUrl = song.SongUrl,
-                      CoverImageUrl = song.CoverImageUrl
+                      CoverImageUrl = song.CoverImageUrl,
+                      SongLike = song.SongLike
                   }).ToListAsync();
         }
 
@@ -126,24 +127,25 @@ namespace EarTube.Repository
 
         public async Task<int> LikeSong(SongModel model)
         {
-            
 
-            var newSong = new Song()
-            {
-                Title = model.Title,
-                Artist = model.Artist,
-                Genre = model.Genre,
-                UpdatedOn = DateTime.UtcNow,
-                Description = model.Description,
-                Id = model.Id,
-                Like = model.Like,
-                SongUrl = model.SongUrl,
-                CoverImageUrl = model.CoverImageUrl,
-                SongLike = model.SongLike
-            };
 
-            model.SongLike += 1;
-            newSong.SongLike = model.SongLike;
+            //var newSong = new Song()
+            //{
+            //    Title = model.Title,
+            //    Artist = model.Artist,
+            //    Genre = model.Genre,
+            //    UpdatedOn = DateTime.UtcNow,
+            //    Description = model.Description,
+            //    Id = model.Id,
+            //    Like = model.Like,
+            //    SongUrl = model.SongUrl,
+            //    CoverImageUrl = model.CoverImageUrl,
+            //    SongLike = model.SongLike
+            //};
+            var newSong =  _db.Song.FirstOrDefault(x => x.Id == model.Id);
+            newSong.SongLike += 1;
+            //model.SongLike += 1;
+            //newSong.SongLike = model.SongLike;
 
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
