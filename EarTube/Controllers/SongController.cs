@@ -80,6 +80,7 @@ namespace EarTube.Controllers
         [Route("song-details/{id}", Name = "songDetails")]
         public async Task<ViewResult> GetSong(int id)
         {
+            ViewBag.comment = new Comment();
             var data = await _songRepository.GetSongById(id);
 
             return View(data);
@@ -172,14 +173,14 @@ namespace EarTube.Controllers
 
 
             int likeSong = await _songRepository.LikeSong(data);
-            data.SongLike += 1; 
+            data.SongLike += 1;
             if (likeSong > 0)
             {
                 return RedirectToAction(nameof(GetAllSongs));
             }
 
 
-            return NotFound();  
+            return NotFound();
         }
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)

@@ -1,4 +1,6 @@
-﻿@model SongModel
+﻿@*@model EarTube.ViewModel.SongCommentViewModel*@
+@model SongModel
+@*@model Comment*@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -11,7 +13,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <img src="@Model.CoverImageUrl" class="img-thumbnail"/>
+                        <img src="@Model.CoverImageUrl" class="img-thumbnail" />
                     </div>
                 </div>
 
@@ -38,7 +40,7 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        <a class="btn btn-outline-primary" href="@Model.SongUrl" b>
+                        <a class="btn btn-outline-primary" href="@Model..SongUrl" b>
                             Download
                         </a>
                     </div>
@@ -51,26 +53,26 @@
 
                 </div>
                 <div class="row my-1">
-                    <div class="col-md-10">
-                        @foreach (var comment in Model.Comment)
-                        {
-                            if (string.IsNullOrWhiteSpace(comment.Description))
-                            {
-                                <h6 id="comment" class="text-muted">No Comments</h6>
-                            }
-                            else
-                            {
-                                <h6 asp-for="@comment.Title" class="control-label"></h6>
-                                <p asp-for="@comment.Description" class="form-control"></p>
-                            }
-
-                        }
+                    <div class="btn-group">
+                        <a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"
+                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
                     </div>
-                </div>
-                <hr />
+                    </div>
+                        <div class="row my-1">
 
+                            <div class="col-md-10">
+                                @foreach (var comment in Model.Comment)
+                                {
+                                    <div class="col-md-4">
+                                        <partial name="_CommentPartial" model="@comment" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <hr />
+
+                </div>
             </div>
-        </div>
 
         
 

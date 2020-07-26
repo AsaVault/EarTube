@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EarTube.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200722105026_AddedSongAsForeignKeyToDb")]
-    partial class AddedSongAsForeignKeyToDb
+    [Migration("20200726151940_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -99,13 +99,16 @@ namespace EarTube.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CommentLikes")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SongId")
+                    b.Property<int>("SongId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -114,9 +117,14 @@ namespace EarTube.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SongId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comment");
                 });
@@ -172,6 +180,9 @@ namespace EarTube.Migrations
 
                     b.Property<string>("Like")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SongLike")
+                        .HasColumnType("int");
 
                     b.Property<string>("SongUrl")
                         .HasColumnType("nvarchar(max)");
@@ -325,8 +336,14 @@ namespace EarTube.Migrations
             modelBuilder.Entity("EarTube.Models.Comment", b =>
                 {
                     b.HasOne("EarTube.Models.Song", "Song")
-                        .WithMany("Comments")
-                        .HasForeignKey("SongId");
+                        .WithMany("Comment")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EarTube.Areas.Identity.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

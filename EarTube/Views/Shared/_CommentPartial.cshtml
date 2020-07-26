@@ -1,0 +1,15 @@
+﻿@model Comment
+
+@*<h6>@(Model.User.FirstName + Model.User.LastName) </h6>*@
+<p>@Model.Description</p>
+
+<div>
+    <small class="text-muted">
+        <a asp-route="likeSong" asp-route-id="@Model.Id"
+           class=""><i class="fas fa-thumbs-up">@Model.CommentLikes</i></a>
+    </small>
+    <small class="text-muted">
+        <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
+           class=""><i class="fas fa-thumbs-down"></i></a>
+    </small>
+</div>

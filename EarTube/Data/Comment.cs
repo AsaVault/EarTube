@@ -15,7 +15,7 @@ namespace EarTube.Models
         public string Description { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public int CommentLikes { get; set; }
 

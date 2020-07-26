@@ -41,15 +41,15 @@ namespace EarTube.Repository
             var newSong = new Song()
             {
                 Title = model.Title,
-                Artist=model.Artist,
-                Genre=model.Genre,
+                Artist = model.Artist,
+                Genre = model.Genre,
                 CreatedOn = DateTime.UtcNow,
                 UpdatedOn = DateTime.UtcNow,
-                Description=model.Description,
-                Id=model.Id,
-                Like=model.Like,
-                SongUrl=model.SongUrl,
-                CoverImageUrl=model.CoverImageUrl
+                Description = model.Description,
+                Id = model.Id,
+                Like = model.Like,
+                SongUrl = model.SongUrl,
+                CoverImageUrl = model.CoverImageUrl
             };
 
             newSong.Comment = new List<Comment>();
@@ -96,7 +96,7 @@ namespace EarTube.Repository
                 });
             }
 
-             _db.Song.Update(newSong);
+            _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
 
             return newSong.Id;
@@ -142,7 +142,7 @@ namespace EarTube.Repository
             //    CoverImageUrl = model.CoverImageUrl,
             //    SongLike = model.SongLike
             //};
-            var newSong =  _db.Song.FirstOrDefault(x => x.Id == model.Id);
+            var newSong = _db.Song.FirstOrDefault(x => x.Id == model.Id);
             newSong.SongLike += 1;
             //model.SongLike += 1;
             //newSong.SongLike = model.SongLike;
@@ -158,7 +158,7 @@ namespace EarTube.Repository
         //Still needed some touch
         public async Task<SongModel> GetSongById(int? id)
         {
-            
+
             return await _db.Song.Where(x => x.Id == id)
                  .Select(song => new SongModel()
                  {
@@ -173,14 +173,14 @@ namespace EarTube.Repository
                      Comment = song.Comment.Select(g => new CommentModel()
                      {
                          Id = g.Id,
-                         Title= g.Title,
+                         Title = g.Title,
                          Description = g.Description
                      }).ToList()
                  }).FirstOrDefaultAsync();
 
         }
 
-        
+
         public List<SongModel> SearchBook(string title, string authorName)
         {
             return null;
