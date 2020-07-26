@@ -63,8 +63,13 @@
                             <div class="col-md-10">
                                 @foreach (var comment in Model.Comment)
                                 {
-                                    <div class="col-md-4">
-                                        <partial name="_CommentPartial" model="@comment" />
+                                    <div class="col-md-10">
+                                        @*Throwing Error*@
+                                        @*<partial name="_CommentPartial" model="@comment" />*@
+
+                                        @*Throwing Errors*@
+                                        @*@comment.User.FirstName*@
+                                        @comment.Description
                                     </div>
                                 }
                             </div>

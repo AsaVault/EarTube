@@ -25,7 +25,7 @@ namespace EarTube.Models
         //[Required(ErrorMessage = "Please choose the language of your book")]
 
         [Display(Name = "Choose the cover photo of your song")]
-        [Required]
+        //[Required]
         public IFormFile CoverPhoto { get; set; }
         public string CoverImageUrl { get; set; }
 

@@ -159,7 +159,7 @@ namespace EarTube.Repository
         public async Task<SongModel> GetSongById(int? id)
         {
 
-            return await _db.Song.Where(x => x.Id == id)
+            return await _db.Song.Where(x => x.Id == id).Include(x => x.Comment)
                  .Select(song => new SongModel()
                  {
                      Title = song.Title,
@@ -177,6 +177,10 @@ namespace EarTube.Repository
                          Description = g.Description
                      }).ToList()
                  }).FirstOrDefaultAsync();
+
+            //return await _db.Song.Where(x => x.Id == id).Include(x => x.Comment).FirstOrDefaultAsync();
+
+
 
         }
 
