@@ -1,4 +1,5 @@
-﻿using EarTube.MyValidator;
+﻿using EarTube.Areas.Identity.Data;
+using EarTube.MyValidator;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,9 @@ namespace EarTube.Models
         [Required]
         public IFormFile SongFile { get; set; }
         public string SongUrl { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
+
 
 
     }

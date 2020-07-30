@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using EarTube.Areas.Identity.Data;
 using EarTube.Data;
@@ -31,7 +29,7 @@ namespace EarTube.Controllers
 
         public IActionResult AddComment(int songId)
         {
-            
+
             var model = new Comment();
             model.SongId = songId;
             return View(model);
@@ -39,21 +37,30 @@ namespace EarTube.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> AddComment(Comment comment)
+        public async Task<IActionResult> AddComment(Comment comment, bool isSuccess = false)
         {
+            
+
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            comment.UserId = userId;
+
             if (ModelState.IsValid)
             {
-
-                var userId = _userManager.GetUserId(this.HttpContext.User);
-                comment.UserId = userId;
+                //var model = new Comment();
+                //model.SongId = comment.SongId;
+                
                 await _db.Comment.AddAsync(comment);
 
                 await _db.SaveChangesAsync();
-
-                return View();
+                //comment.Description = " ";
+                ViewBag.IsSuccess = isSuccess;
+                return RedirectToAction("GetSong", "Song", new {id =comment.SongId, isSuccess = true } );
+                //return View(comment);
+                //return RedirC:\Users\User\source\repos\EarTube\EarTube\Views\Song\GetSong.cshtmlect("song-details/{id}" );
+                //return RedirectToRoute("song-details/{id}");
             }
 
-            return View(comment);
+            return View();
         }
 
     }

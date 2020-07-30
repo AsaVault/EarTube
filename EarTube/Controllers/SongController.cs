@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EarTube.Areas.Identity.Data;
 using EarTube.Models;
 using EarTube.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EarTube.Controllers
 {
@@ -19,36 +19,50 @@ namespace EarTube.Controllers
     {
         private readonly SongRepository _songRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public SongController(SongRepository songRepository,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            UserManager<ApplicationUser> userManager)
         {
             _songRepository = songRepository;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
-        public async Task<ViewResult> GetAllSongs()
+        public async Task<ViewResult> GetAllSongs(bool isSuccess, int songId)
 
         {
-            var data = await _songRepository.GetAllSongs();
-
-            return View(data);
-        }
-
-        // Get - AddNewSong
-        public ViewResult AddNewSong(bool isSuccess = false, int songId = 0)
-        {
-            var model = new SongModel();
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            var datas = await _songRepository.GetAllSongs();
 
             ViewBag.IsSuccess = isSuccess;
             ViewBag.SongId = songId;
+
+            foreach (var data in datas)
+            {
+                data.UserId = userId;
+            }
+            return View(datas);
+            //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
+        }
+
+        // Get - AddNewSong
+        public ViewResult AddNewSong(/*bool isSuccess = false, int songId = 0*/)
+        {
+            var model = new SongModel();
+
+            //ViewBag.IsSuccess = isSuccess;
+            //ViewBag.SongId = songId;
             return View(model);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> AddNewSong(SongModel songModel)
+        public async Task<IActionResult> AddNewSong(SongModel songModel, bool isSuccess = false, int songId = 0)
         {
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            songModel.UserId = userId;
             if (ModelState.IsValid)
             {
                 if (songModel.CoverPhoto != null)
@@ -67,10 +81,14 @@ namespace EarTube.Controllers
 
                 }
 
+                ViewBag.IsSuccess = isSuccess;
+                ViewBag.SongId = songId;
+
                 int id = await _songRepository.AddNewSong(songModel);
                 if (id > 0)
                 {
-                    return RedirectToAction(nameof(AddNewSong), new { isSuccess = true, songId = id });
+                    //return RedirectToAction(nameof(AddNewSong), new { isSuccess = true, songId = id });
+                    return RedirectToAction(nameof(GetAllSongs), new { isSuccess = true, songId = songModel.Id });
                 }
             }
 
@@ -78,10 +96,14 @@ namespace EarTube.Controllers
         }
 
         [Route("song-details/{id}", Name = "songDetails")]
-        public async Task<ViewResult> GetSong(int id)
+        public async Task<ViewResult> GetSong(int id, bool isSuccess)
         {
-            ViewBag.comment = new Comment();
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+
+            //ViewBag.comment = new Comment();
+            ViewBag.IsSuccess = isSuccess;
             var data = await _songRepository.GetSongById(id);
+            //data.UserId = userId;
 
             return View(data);
         }
@@ -170,7 +192,6 @@ namespace EarTube.Controllers
             }
 
             var data = await _songRepository.GetSongById(id);
-
 
             int likeSong = await _songRepository.LikeSong(data);
             data.SongLike += 1;

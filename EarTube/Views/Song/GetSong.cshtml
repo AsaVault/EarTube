@@ -8,6 +8,15 @@
     <div class="container">
         <h5 class="display-4">Song details</h5>
         <br />
+        @if (ViewBag.IsSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Congratulations</strong> You have added a new comment successfully. <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
         <div class="row ">
             <div class="col-md-6">
 
@@ -57,29 +66,32 @@
                         <a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"
                            class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
                     </div>
-                    </div>
-                        <div class="row my-1">
-
-                            <div class="col-md-10">
-                                @foreach (var comment in Model.Comment)
-                                {
-                                    <div class="col-md-10">
-                                        @*Throwing Error*@
-                                        @*<partial name="_CommentPartial" model="@comment" />*@
-
-                                        @*Throwing Errors*@
-                                        @*@comment.User.FirstName*@
-                                        @comment.Description
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <hr />
-
                 </div>
-            </div>
+                <div class="row my-1">
 
-        
+                    <div class="col-md-10">
+                        @foreach (var comment in Model.Comment)
+                        {
+                            <div class="col-md-10">
+                                @*Throwing Error*@
+                                @*<partial name="_CommentPartial" model="@comment" />*@
+
+                                @*Throwing Errors*@
+                                @*@comment.User.FirstName*@
+                                @*<h6>@comment.User.FirstName</h6>*@
+                                <small>@comment?.User?.FirstName</small>
+                                <p>@comment.Description</p>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+
+            </div>
+        </div>
+
+
 
         <hr />
 

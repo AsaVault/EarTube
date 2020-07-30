@@ -1,4 +1,5 @@
-﻿using EarTube.Data;
+﻿using EarTube.Areas.Identity.Data;
+using EarTube.Data;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace EarTube.Models
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public List<Comment> Comment { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
 
 
     }
