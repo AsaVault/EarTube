@@ -36,7 +36,9 @@ namespace EarTube.Controllers
             var userId = _userManager.GetUserId(this.HttpContext.User);
             var datas = await _songRepository.GetAllSongs();
 
-            ViewBag.IsSuccess = isSuccess;
+            ViewBag.IsSuccess = TempData["Alert"];
+            //isSuccess = false;
+            TempData["Alert"] = false;
             ViewBag.SongId = songId;
 
             foreach (var data in datas)
@@ -88,7 +90,8 @@ namespace EarTube.Controllers
                 if (id > 0)
                 {
                     //return RedirectToAction(nameof(AddNewSong), new { isSuccess = true, songId = id });
-                    return RedirectToAction(nameof(GetAllSongs), new { isSuccess = true, songId = songModel.Id });
+                    TempData["Alert"] = true;
+                    return RedirectToAction(nameof(GetAllSongs), new { songId = id});
                 }
             }
 

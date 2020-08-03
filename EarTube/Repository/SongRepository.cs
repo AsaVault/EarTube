@@ -51,7 +51,8 @@ namespace EarTube.Repository
                 Id = model.Id,
                 Like = model.Like,
                 SongUrl = model.SongUrl,
-                //UserId = model.UserId,
+                UserId = model.UserId,
+                User = model.User,
                 CoverImageUrl = model.CoverImageUrl
             };
 
