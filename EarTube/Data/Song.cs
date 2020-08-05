@@ -23,6 +23,8 @@ namespace EarTube.Models
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public List<Comment> Comment { get; set; }
+        [NotMapped]
+        public Comment Comments { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 

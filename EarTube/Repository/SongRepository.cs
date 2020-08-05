@@ -56,16 +56,16 @@ namespace EarTube.Repository
                 CoverImageUrl = model.CoverImageUrl
             };
 
-            newSong.Comment = new List<Comment>();
+            //newSong.Comment = new List<Comment>();
 
-            foreach (var comment in model.Comment)
-            {
-                newSong.Comment.Add(new Comment()
-                {
-                    Title = comment.Title,
-                    Description = comment.Description
-                });
-            }
+            //foreach (var comment in model.Comment)
+            //{
+            //    newSong.Comment.Add(new Comment()
+            //    {
+            //        Title = comment.Title,
+            //        Description = comment.Description
+            //    });
+            //}
 
             await _db.Song.AddAsync(newSong);
             await _db.SaveChangesAsync();
@@ -150,10 +150,12 @@ namespace EarTube.Repository
             //var newSong = await _db.Song.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                
+
+            model.SongLike = newSong.SongLike;
+            //newSong.SongLike = model.SongLike;
             newSong.SongLike += 1;
             //model.SongLike += 1;
-            newSong.SongLike = model.SongLike;
+            
 
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
@@ -167,7 +169,7 @@ namespace EarTube.Repository
         public async Task<SongModel> GetSongById(int? id)
         {
 
-            return await _db.Song.Where(x => x.Id == id )
+            return await _db.Song.Where(x => x.Id == id ).Include(c=>c.Comment)
                  .Select(song => new SongModel()
                  {
                      Title = song.Title,

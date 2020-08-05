@@ -4,7 +4,7 @@
 }
 
     <div class="container">
-        <h3 class="display-4">All Songs</h3>
+        <h3 class="h5 text-uppercase">All Songs</h3>
         <br />
         @if (ViewBag.IsSuccess == true)
         {
@@ -16,15 +16,16 @@
                 </button>
             </div>
         }
-        <div class="row">
+    <div class="row">
+        @*<p>@Model.User.FirstName</p>*@
+        @foreach (var song in Model)
+        {
+            <div class="col-md-4">
+                <partial name="_songThumbnail" model="@song" />
 
-            @foreach (var song in Model)
-            {
-                <div class="col-md-4">
-                    <partial name="_songThumbnail" model="@song" />
-                </div>
-            }
+            </div>
+        }
 
-        </div>
+    </div>
     </div>
 

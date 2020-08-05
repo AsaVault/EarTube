@@ -1,42 +1,13 @@
 ﻿@model SongModel
 @*@inject EarTube.Areas.Identity.Data.ApplicationUser users*@
 
+
 <div class="card mb-4 shadow-sm">
-    <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg" : Model.CoverImageUrl)" class="img-thumbnail" style="width:340px; height:145px; " />
+    <a asp-route="songDetails" asp-route-id="@Model.Id">
+        <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg" : Model.CoverImageUrl)" class="img-thumbnail" style="width:340px; height:145px; " />
+    </a>
     <div class="card-body">
-        <h5 class="card-title">@(string.IsNullOrEmpty(Model.Title) ? "Name is not available" : Model.Title)</h5>
-        <p class="card-text">@(string.IsNullOrEmpty(Model.Description) ? "Description is not availabe": Model.Description)</p>
-        @*<p class="card-text">@Model.UserId</p>*@
-        <p class="card-text">@(Model?.User?.FirstName) </p>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-                <a asp-route="songDetails" asp-route-id="@Model.Id"
-                   class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
-            </div>
-            <div class="btn-group">
-                <a asp-route="editSong" asp-route-id="@Model.Id"
-                   class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
-            </div>
-            <div class="btn-group">
-                <a asp-route="deleteSong" asp-route-id="@Model.Id"
-                   class="btn btn-sm btn-outline-secondary"><i class="fas fa-trash"></i></a>
-            </div>
-
-            <small class="text-muted">
-                <a asp-route="likeSong" asp-route-id="@Model.Id"
-                   class=""><i class="fas fa-thumbs-up">@Model.SongLike</i></a>
-            </small>
-            <small class="text-muted">
-                <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                   class=""><i class="fas fa-thumbs-down"></i></a>
-            </small>
-            <small class="text-muted">
-                <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                   class=""><i class="fas fa-share"></i></a>
-            </small>
-
-            <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Artist) ? "NA" : Model.Artist)</small>
-
-        </div>
+        <p class="card-title text-uppercase"><strong>@(string.IsNullOrEmpty(Model.Title) ? "Name is not available" : Model.Title)</strong></p>
+        <p class="card-text text-muted">Uploaded by: @(Model?.User?.FirstName + " " + Model?.User?.LastName) </p>
     </div>
 </div>

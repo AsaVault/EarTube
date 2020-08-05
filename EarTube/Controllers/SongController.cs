@@ -41,10 +41,10 @@ namespace EarTube.Controllers
             TempData["Alert"] = false;
             ViewBag.SongId = songId;
 
-            foreach (var data in datas)
-            {
-                data.UserId = userId;
-            }
+            //foreach (var data in datas)
+            //{
+            //    data.UserId = userId;
+            //}
             return View(datas);
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }

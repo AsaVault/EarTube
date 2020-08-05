@@ -31,6 +31,7 @@ namespace EarTube.Models
         public string CoverImageUrl { get; set; }
 
         public List< CommentModel> Comment { get; set; }
+        public CommentModel Comments { get; set; }
 
         [MyUploadFileSizeValidator(sizeInBytes: size * 1024 * 1024,
                                ErrorMessage = "Image filesize should be smaller than 5 MB")]
