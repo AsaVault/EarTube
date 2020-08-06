@@ -54,7 +54,8 @@ namespace EarTube.Controllers
                 await _db.SaveChangesAsync();
                 //comment.Description = " ";
                 ViewBag.IsSuccess = isSuccess;
-                return RedirectToAction("GetSong", "Song", new {id =comment.SongId, isSuccess = true } );
+                TempData["Alert"] = true;
+                return RedirectToAction("GetSong", "Song", new {id =comment.SongId } );
                 //return View(comment);
                 //return RedirC:\Users\User\source\repos\EarTube\EarTube\Views\Song\GetSong.cshtmlect("song-details/{id}" );
                 //return RedirectToRoute("song-details/{id}");

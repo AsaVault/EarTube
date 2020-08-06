@@ -104,8 +104,12 @@ namespace EarTube.Controllers
             var userId = _userManager.GetUserId(this.HttpContext.User);
 
             //ViewBag.comment = new Comment();
-            ViewBag.IsSuccess = isSuccess;
+            //ViewBag.IsSuccess = TempData["Alert"];
+            //isSuccess = false;
+            
             var data = await _songRepository.GetSongById(id);
+            ViewBag.IsSuccess = TempData["Alert"];
+            TempData["Alert"] = false;
             //data.UserId = userId;
 
             return View(data);

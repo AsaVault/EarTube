@@ -9,7 +9,7 @@
         <div class="col-md-10">
             <h3 class="display-4">Upload new Song</h3>
             <hr />
-            @if (ViewBag.IsSuccess == true)
+            @*@if (ViewBag.IsSuccess == true)
             {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>Congratulations</strong> You have added new song successfully. <br />
@@ -18,7 +18,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            }
+            }*@
 
             <form method="post" enctype="multipart/form-data" asp-action="AddNewSong" asp-controller="Song">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
