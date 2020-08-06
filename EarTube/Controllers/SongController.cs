@@ -49,6 +49,24 @@ namespace EarTube.Controllers
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }
 
+
+        //Get Song by UserId
+
+        public async Task<IActionResult> GetSongByUser(/*bool isSuccess, int songId*/)
+
+        {
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            var datas = await _songRepository.GetSongByUser(userId);
+
+
+            if (datas.Count < 0)
+                return RedirectToAction(nameof(GetAllSongs));
+
+
+             return View(datas);
+            //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
+        }
+
         // Get - AddNewSong
         public ViewResult AddNewSong(/*bool isSuccess = false, int songId = 0*/)
         {

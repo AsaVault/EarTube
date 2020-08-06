@@ -1,5 +1,7 @@
-﻿using EarTube.Data;
+﻿using EarTube.Areas.Identity.Data;
+using EarTube.Data;
 using EarTube.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,14 +16,37 @@ namespace EarTube.Repository
     {
 
         private readonly ApplicationDbContext _db;
-        public SongRepository(ApplicationDbContext db)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public SongRepository(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public async Task<List<SongModel>> GetAllSongs()
         {
+            
             return await _db.Song.Include(a=>a.User)
+                  .Select(song => new SongModel()
+                  {
+                      Title = song.Title,
+                      Artist = song.Artist,
+                      Genre = song.Genre,
+                      Description = song.Description,
+                      Id = song.Id,
+                      Like = song.Like,
+                      UserId = song.UserId,
+                      User = song.User,
+                      SongUrl = song.SongUrl,
+                      CoverImageUrl = song.CoverImageUrl,
+                      SongLike = song.SongLike
+                  }).ToListAsync();
+        }
+
+        public async Task<List<SongModel>> GetSongByUser(string userId)
+        {
+
+            return await _db.Song.Include(a => a.User).Where(s=>s.UserId == userId)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,

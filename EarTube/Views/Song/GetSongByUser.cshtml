@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SongModel>
+@{
+    ViewData["Title"] = "GetSongByUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <h3 class="h5 text-uppercase">My Songs</h3>
+    <br />
+    @*@if (ViewBag.IsSuccess == true)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Congratulations</strong> You have added new song successfully. <br />
+            Click <a asp-controller="Song" asp-action="GetSong" asp-route-id="@ViewBag.songId">here</a> to view the details
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }*@
+
+<div class="row">
+    @*<p>@Model.User.FirstName</p>*@
+
+    @foreach (var song in Model)
+    {
+        <div class="col-md-4">
+            <partial name="_songThumbnail" model="@song" />
+
+        </div>
+    }
+
+
+</div>
+</div>
+
