@@ -24,7 +24,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <img src="@Model.CoverImageUrl" class="img-thumbnail" style="width: 640px; height: 360px; left: 0px; top: 0px;" />
+                    <img src="@Model.CoverImageUrl" class="img-thumbnail" style="width: 640px; height: 420px; left: 0px; top: 0px;" />
                     <h5 class="text-uppercase my-2"><strong>@Model.Title</strong></h5>
                 </div>
             </div>
@@ -56,22 +56,22 @@
                     }
 
 
-                    <small class="text-muted">
+                    <small class="text-muted p-1">
                         <a asp-route="likeSong" asp-route-id="@Model.Id"
-                           class=""><i class="fas fa-thumbs-up">@Model.SongLike</i></a>
+                           class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike</span></i></a>
                     </small>
 
                     @if (UserManager.GetUserId(User).ToString() != Model.UserId)
                     {
-                        <small class="text-muted">
+                        <small class="text-muted p-1">
                             <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                               class=""><i class="fas fa-thumbs-down"></i></a>
+                               class="pl-1"><i class="fas fa-thumbs-down"></i></a>
                         </small>
                     }
 
-                    <small class="text-muted">
+                    <small class="text-muted p-1">
                         <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                           class=""><i class="fas fa-share"></i></a>
+                           class="pl-1"><i class="fas fa-share"></i></a>
                     </small>
 
                     <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Genre) ? "Genre: NA" : Model.Genre)</small>
@@ -125,8 +125,13 @@
                 @*Throwing Errors*@
                 @*@comment.User.FirstName*@
                 @*<h6>@comment.User.FirstName</h6>*@
-                <small>@comment?.User?.FirstName</small>
-                <p>@comment.Description</p>
+            <div class="pb-3">
+
+
+                <h6 class=" text-capitalize">@comment?.User?.FirstName</h6>
+                <p class="pl-2">@comment.Description</p>
+
+            </div>
 
             }
         </div>
