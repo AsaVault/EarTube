@@ -37,35 +37,38 @@
                 </div>
 
                 <div class="col-md-8">
-                    <div class="btn-group">
-                        <a asp-route="songDetails" asp-route-id="@Model.Id"
-                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
-                    </div>
-                    <div class="btn-group">
-                        <a asp-route="editSong" asp-route-id="@Model.Id"
-                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
-                    </div>
-                    <div class="btn-group">
-                        <a asp-route="deleteSong" asp-route-id="@Model.Id"
-                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-trash"></i></a>
-                    </div>
+
+                    @*<div class="btn-group">
+            <a asp-route="songDetails" asp-route-id="@Model.Id"
+               class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
+        </div>*@
+
+                    @if (UserManager.GetUserId(User).ToString() == Model.UserId)
+                    {
+                        <div class="btn-group">
+                            <a asp-route="editSong" asp-route-id="@Model.Id"
+                               class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a asp-route="deleteSong" asp-route-id="@Model.Id"
+                               class="btn btn-sm btn-outline-secondary"><i class="fas fa-trash"></i></a>
+                        </div>
+                    }
+
 
                     <small class="text-muted">
                         <a asp-route="likeSong" asp-route-id="@Model.Id"
                            class=""><i class="fas fa-thumbs-up">@Model.SongLike</i></a>
                     </small>
 
-                    @if (SignInManager.IsSignedIn(User) && UserManager.GetUserId(User).ToString() == Model.UserId)
-                    {
-
-                    }
-                    else
+                    @if (UserManager.GetUserId(User).ToString() != Model.UserId)
                     {
                         <small class="text-muted">
                             <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
                                class=""><i class="fas fa-thumbs-down"></i></a>
                         </small>
                     }
+
                     <small class="text-muted">
                         <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
                            class=""><i class="fas fa-share"></i></a>
