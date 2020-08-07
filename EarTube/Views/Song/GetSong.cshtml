@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container" style="background-color:#0a0a0a;">
     <h5 class="h5 text-uppercase">Song details</h5>
     <br />
     @if (ViewBag.IsSuccess == true)
@@ -58,7 +58,7 @@
 
                     <small class="text-muted p-1">
                         <a asp-route="likeSong" asp-route-id="@Model.Id"
-                           class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike</span></i></a>
+                           class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
                     </small>
 
                     @if (UserManager.GetUserId(User).ToString() != Model.UserId)
@@ -128,7 +128,7 @@
             <div class="pb-3">
 
 
-                <h6 class=" text-capitalize">@comment?.User?.FirstName</h6>
+                <h6 class="text-primary text-capitalize">@comment?.User?.FirstName</h6>
                 <p class="pl-2">@comment.Description</p>
 
             </div>

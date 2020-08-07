@@ -219,10 +219,10 @@ namespace EarTube.Controllers
             var data = await _songRepository.GetSongById(id);
 
             int likeSong = await _songRepository.LikeSong(data);
-            data.SongLike += 1;
+            //data.SongLike += 1;
             if (likeSong > 0)
             {
-                return RedirectToAction(nameof(GetAllSongs));
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
             }
 
 

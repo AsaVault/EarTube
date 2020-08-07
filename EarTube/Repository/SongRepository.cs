@@ -175,10 +175,10 @@ namespace EarTube.Repository
             //var newSong = await _db.Song.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-
-            model.SongLike = newSong.SongLike;
+            model.SongLike += 1;
+            newSong.SongLike = model.SongLike ;
             //newSong.SongLike = model.SongLike;
-            newSong.SongLike += 1;
+            
             //model.SongLike += 1;
             
 
