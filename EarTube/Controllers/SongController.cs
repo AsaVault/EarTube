@@ -33,7 +33,7 @@ namespace EarTube.Controllers
         public async Task<ViewResult> GetAllSongs(bool isSuccess, int songId)
 
         {
-            var userId = _userManager.GetUserId(this.HttpContext.User);
+            //var userId = _userManager.GetUserId(this.HttpContext.User);
             var datas = await _songRepository.GetAllSongs();
 
             ViewBag.IsSuccess = TempData["Alert"];
@@ -119,7 +119,7 @@ namespace EarTube.Controllers
         [Route("song-details/{id}", Name = "songDetails")]
         public async Task<ViewResult> GetSong(int id, bool isSuccess)
         {
-            var userId = _userManager.GetUserId(this.HttpContext.User);
+            //var userId = _userManager.GetUserId(this.HttpContext.User);
 
             //ViewBag.comment = new Comment();
             //ViewBag.IsSuccess = TempData["Alert"];
@@ -127,7 +127,12 @@ namespace EarTube.Controllers
             
             var data = await _songRepository.GetSongById(id);
             ViewBag.IsSuccess = TempData["Alert"];
+            ViewBag.LikeSuccess = TempData["LikeAlert"];
+            ViewBag.IsLikeSuccess = TempData["AlreadyLikeAlert"];
             TempData["Alert"] = false;
+            TempData["LikeAlert"] = false;
+            TempData["AlreadyLikeAlert"] = false;
+            
             //data.UserId = userId;
 
             return View(data);
@@ -211,6 +216,35 @@ namespace EarTube.Controllers
 
         public async Task<IActionResult> LikeSong(int? id)
         {
+            
+            
+            
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            bool likeSong = await _songRepository.LikeSong(data, userId);
+            //data.SongLike += 1;
+            if (likeSong)
+            {
+                TempData["LikeAlert"] = true;
+                TempData["AlreadyLikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["LikeAlert"] = false;
+            TempData["AlreadyLikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
+        }
+
+        //UserSongLikeFormer
+
+        public async Task<IActionResult> UserSongLike(int? id)
+        {
             if (id == null)
             {
                 return NotFound();
@@ -218,7 +252,7 @@ namespace EarTube.Controllers
 
             var data = await _songRepository.GetSongById(id);
 
-            int likeSong = await _songRepository.LikeSong(data);
+            int likeSong = await _songRepository.UserLikeSong(data);
             //data.SongLike += 1;
             if (likeSong > 0)
             {
