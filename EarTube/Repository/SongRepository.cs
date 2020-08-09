@@ -39,7 +39,8 @@ namespace EarTube.Repository
                       User = song.User,
                       SongUrl = song.SongUrl,
                       CoverImageUrl = song.CoverImageUrl,
-                      SongLike = song.SongLike
+                      SongLike = song.SongLike,
+                      SongDisLike = song.SongDisLike
                   }).ToListAsync();
         }
 
@@ -59,7 +60,8 @@ namespace EarTube.Repository
                       User = song.User,
                       SongUrl = song.SongUrl,
                       CoverImageUrl = song.CoverImageUrl,
-                      SongLike = song.SongLike
+                      SongLike = song.SongLike,
+                      SongDisLike = song.SongDisLike
                   }).ToListAsync();
         }
 
@@ -185,6 +187,24 @@ namespace EarTube.Repository
         }
 
 
+        //Dislike Song
+        public async Task<bool> DisikeSong(SongModel model, string userId)
+        {
+            var dislikeSong = false;
+            var userSongLike = await _db.UserSongDislike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+            if (!userSongLike)
+            {
+                var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                newSong.SongDisLike += 1;
+                _db.Song.Update(newSong);
+                _db.UserSongDislike.Add(new UserSongDislike { UserId = userId, SongId = model.Id });
+                await _db.SaveChangesAsync();
+                dislikeSong = true;
+            }
+
+            return dislikeSong;
+        }
+
         //Still needed some touch
         public async Task<SongModel> GetSongById(int? id)
         {
@@ -199,6 +219,7 @@ namespace EarTube.Repository
                      Id = song.Id,
                      Like = song.Like,
                      SongLike = song.SongLike,
+                     SongDisLike = song.SongDisLike,
                      //SongUrl = song.SongUrl,
                      UserId = song.UserId,
                      CoverImageUrl = song.CoverImageUrl,
