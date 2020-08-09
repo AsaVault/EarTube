@@ -216,10 +216,6 @@ namespace EarTube.Controllers
 
         public async Task<IActionResult> LikeSong(int? id)
         {
-            
-            
-            
-
             if (id == null)
             {
                 return NotFound();
@@ -261,6 +257,32 @@ namespace EarTube.Controllers
 
 
             return NotFound();
+        }
+
+        //Song Dislike
+        [Route("dislike-song/{id}", Name = "dislikeSong")]
+
+        public async Task<IActionResult> DislikeSong(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            bool dislikeSong = await _songRepository.DisikeSong(data, userId);
+            //data.SongLike += 1;
+            if (dislikeSong)
+            {
+                TempData["DislikeAlert"] = true;
+                TempData["AlreadyDislikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["DislikeAlert"] = false;
+            TempData["AlreadyDislikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)

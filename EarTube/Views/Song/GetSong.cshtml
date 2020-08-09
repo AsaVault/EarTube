@@ -84,8 +84,8 @@
                         @if (UserManager.GetUserId(User).ToString() != Model.UserId)
                         {
                             <small class="text-muted p-1">
-                                <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                                   class="pl-1"><i class="fas fa-thumbs-down"></i></a>
+                                <a asp-route="dislikeSong" asp-route-id="@Model.Id"
+                                   class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
                             </small>
                         }
 
