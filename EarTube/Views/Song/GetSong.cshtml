@@ -39,12 +39,33 @@
                 </button>
             </div>
         }
+
+        @* Dislike Alert *@
+        @if (ViewBag.IsDislikeSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                You already <strong>Dislike</strong> this song <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (ViewBag.DislikeSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                You <strong>Dislike</strong> this song <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
         <div class="row ">
             <div class="col-md-7">
 
                 <div class="row">
                     <div class="col-md-12">
-                        <img src="@Model.CoverImageUrl" class="img-thumbnail" style="width: 640px; height: 420px; left: 0px; top: 0px;" />
+                        <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg": Model.CoverImageUrl)" class="img-thumbnail" style="width: 640px; height: 420px; left: 0px; top: 0px;" />
                         <h5 class="text-uppercase my-2"><strong>@Model.Title</strong></h5>
                     </div>
                 </div>
@@ -59,9 +80,9 @@
                     <div class="col-md-8">
 
                         @*<div class="btn-group">
-                            <a asp-route="songDetails" asp-route-id="@Model.Id"
-                               class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
-                        </div>*@
+            <a asp-route="songDetails" asp-route-id="@Model.Id"
+               class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
+        </div>*@
 
                         @if (UserManager.GetUserId(User).ToString() == Model.UserId)
                         {
@@ -76,15 +97,26 @@
                         }
 
 
+                        @*<small class="text-muted p-1">
+            <a asp-route="likeSong" asp-route-id="@Model.Id"
+               class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
+        </small>*@
+
                         <small class="text-muted p-1">
-                            <a asp-route="likeSong" asp-route-id="@Model.Id"
+                            <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
                                class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
                         </small>
 
                         @if (UserManager.GetUserId(User).ToString() != Model.UserId)
                         {
-                            <small class="text-muted p-1">
+                            
+                            @*<small class="text-muted p-1">
                                 <a asp-route="dislikeSong" asp-route-id="@Model.Id"
+                                   class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
+                            </small>*@
+
+                            <small class="text-muted p-1">
+                                <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
                                    class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
                             </small>
                         }
