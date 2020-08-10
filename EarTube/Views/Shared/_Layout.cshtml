@@ -28,7 +28,9 @@
                 {
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse offset-2">
                         <a class="navbar-brand text-muted" asp-area="" asp-controller="Song" asp-action="GetSongByUser">My Songs</a>
-                        <a class="navbar-brand ml-4 text-muted" asp-area="" asp-controller="Song" asp-action="AddNewSong"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                        @*<a class="navbar-brand ml-4 text-muted" asp-area="" asp-controller="Song" asp-action="AddNewSong"><i class="fa fa-upload" aria-hidden="true"></i></a>*@
+                        @*<a class="navbar-brand ml-4 text-muted" asp-area="" asp-controller="Song" asp-action="AddOrEdit"><i class="fa fa-upload" aria-hidden="true"></i></a>*@
+                        <a class="navbar-brand ml-4 text-muted btn-click" onclick="showInPopup('@Url.Action("AddOrEdit","Song",null,Context.Request.Scheme)','New Song Upload')"><i class="fa fa-upload" aria-hidden="true"></i></a>
                     </div>
                 }
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
@@ -42,6 +44,29 @@
             @RenderBody()
         </main>
     </div>
+
+    @* Modal Html Code *@
+    <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Loading Spinner *@
+
+    @*<div class="loaderbody" id="loaderbody">
+        <div class="loader"></div>
+    </div>*@
 
     <footer class="border-top footer text-muted">
         <div class="container">

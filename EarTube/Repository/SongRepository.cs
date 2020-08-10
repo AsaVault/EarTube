@@ -114,16 +114,16 @@ namespace EarTube.Repository
                 CoverImageUrl = model.CoverImageUrl
             };
 
-            newSong.Comment = new List<Comment>();
+            //newSong.Comment = new List<Comment>();
 
-            foreach (var comment in model.Comment)
-            {
-                newSong.Comment.Add(new Comment()
-                {
-                    Title = comment.Title,
-                    Description = comment.Description
-                });
-            }
+            //foreach (var comment in model.Comment)
+            //{
+            //    newSong.Comment.Add(new Comment()
+            //    {
+            //        Title = comment.Title,
+            //        Description = comment.Description
+            //    });
+            //}
 
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
@@ -199,7 +199,7 @@ namespace EarTube.Repository
                      Id = song.Id,
                      Like = song.Like,
                      SongLike = song.SongLike,
-                     //SongUrl = song.SongUrl,
+                     SongUrl = song.SongUrl,
                      UserId = song.UserId,
                      CoverImageUrl = song.CoverImageUrl,
                      Comment = song.Comment.Select(g => new CommentModel()

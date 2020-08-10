@@ -1,22 +1,20 @@
 ﻿@model Comment
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-    <div class="row my-1">
-        <form method="post" asp-action="AddComment" asp-controller="Comment">
+<div class="row my-1">
+    <div class="col-md-12">
+        <form method="post" asp-action="AddComment" asp-controller="Comment" onsubmit="return AjaxPost(this);">
             <input asp-for="SongId" type="hidden" />
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Comment" class="btn btn-primary" />
-
-            </div>
-            <div class="form-group">
-                <a  asp-route="songDetails" asp-route-id="@Model.SongId" >Back</a>
+                <input type="submit" value="Comment" class="btn btn-primary form-control" />
             </div>
         </form>
-        </div>
+    </div>
+</div>

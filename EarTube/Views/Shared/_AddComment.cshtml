@@ -1,0 +1,13 @@
+﻿@model SongModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+    <div class="col-md-10">
+        @foreach (var comment in Model.Comment)
+        {
+            <div class="pb-3">
+                <h6 class="text-primary text-capitalize">@comment?.User?.FirstName</h6>
+                <p class="pl-2">@comment.Description</p>
+            </div>
+        }
+    </div>
