@@ -55,18 +55,9 @@ namespace EarTube.Controllers
                 ViewBag.IsSuccess = isSuccess;
                 TempData["Alert"] = true;
 
-                //return RedirectToAction("GetSong", "Song", new {id =comment.SongId } );
-
                 //Adding Json here
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_AddComment", _db.Comment.ToListAsync()) });
-
-                //return View(comment);
-                //return RedirC:\Users\User\source\repos\EarTube\EarTube\Views\Song\GetSong.cshtmlect("song-details/{id}" );
-                //return RedirectToRoute("song-details/{id}");
             }
-
-            //return View();
-
             // JSON Return
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddComment", comment) });
         }

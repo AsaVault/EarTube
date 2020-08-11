@@ -10,35 +10,37 @@
 <div class="container" style="background-color:#0a0a0a;">
     <h5 class="h5 text-uppercase">Song details</h5>
     <br />
-    @if (ViewBag.IsSuccess == true)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Congratulations</strong> You have added a new comment successfully. <br />
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
+    <div>
+        @if (ViewBag.IsSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Congratulations</strong> You have added a new comment successfully. <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
 
-    @if (ViewBag.IsLikeSuccess == true)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            You already <strong>Like</strong> this song <br />
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
+        @if (ViewBag.IsLikeSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                You already <strong>Like</strong> this song <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
 
-    @if (ViewBag.LikeSuccess == true)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            You <strong>Like</strong> this song <br />
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
+        @if (ViewBag.LikeSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                You <strong>Like</strong> this song <br />
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+    </div>
     <div class="row ">
         <div class="col-md-7">
 
