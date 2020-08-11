@@ -77,7 +77,7 @@
                         </a>
                     </div>
 
-                    <div class="col-md-8">
+                    <div class="col-md-9">
 
                         @*<div class="btn-group">
             <a asp-route="songDetails" asp-route-id="@Model.Id"
@@ -102,10 +102,10 @@
                class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
         </small>*@
 
-                        <small class="text-muted p-1">
+                        <span class="text-muted p-2">
                             <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
-                               class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
-                        </small>
+                               class="pl-1"><i class="fas fa-thumbs-up fa-6"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
+                        </span>
 
                         @if (UserManager.GetUserId(User).ToString() != Model.UserId)
                         {
@@ -115,16 +115,16 @@
                                    class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
                             </small>*@
 
-                            <small class="text-muted p-1">
+                            <span class="text-muted p-2 ">
                                 <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
-                                   class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
-                            </small>
+                                   class="pl-1"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
+                            </span>
                         }
 
-                        <small class="text-muted p-1">
+                        <span class="text-muted p-2">
                             <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
-                               class="pl-1"><i class="fas fa-share"></i></a>
-                        </small>
+                               class="px-1"><i class="fas fa-share fa-6"></i></a>
+                        </span>
 
                         <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Genre) ? "Genre: NA" : Model.Genre)</small>
                         <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Artist) ? "NA" : Model.Artist)</small>
