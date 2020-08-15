@@ -25,8 +25,8 @@ namespace EarTube.Repository
 
         public async Task<List<SongModel>> GetAllSongs()
         {
-            
-            return await _db.Song.Include(a=>a.User)
+
+            return await _db.Song.Include(a => a.User)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,
@@ -47,7 +47,7 @@ namespace EarTube.Repository
         public async Task<List<SongModel>> GetSongByUser(string userId)
         {
 
-            return await _db.Song.Include(a => a.User).Where(s=>s.UserId == userId)
+            return await _db.Song.Include(a => a.User).Where(s => s.UserId == userId)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,
@@ -170,7 +170,7 @@ namespace EarTube.Repository
                 await _db.SaveChangesAsync();
                 likeSong = true;
             }
-            
+
             return likeSong;
         }
 
@@ -191,11 +191,73 @@ namespace EarTube.Repository
         public async Task<bool> DisikeSong(SongModel model, string userId)
         {
             var dislikeSong = false;
-            var userSongLike = await _db.UserSongDislike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
-            if (!userSongLike)
+            var userSongDislike = await _db.UserSongDislike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+            if (!userSongDislike)
             {
                 var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                 newSong.SongDisLike += 1;
+                _db.Song.Update(newSong);
+                _db.UserSongDislike.Add(new UserSongDislike { UserId = userId, SongId = model.Id });
+                await _db.SaveChangesAsync();
+                dislikeSong = true;
+            }
+
+            return dislikeSong;
+        }
+
+        //Youtube Like Song Logic
+
+        public async Task<bool> YoutubeLikeSong(SongModel model, string userId)
+        {
+            var likeSong = false;
+            var userSongLike = await _db.UserSongLike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+            if (!userSongLike)
+            {
+                var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                var userSongDislike = await _db.UserSongDislike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+                if (!userSongDislike)
+                {
+                    newSong.SongLike += 1;
+                }
+                else
+                {
+                    var dislikeData = await _db.UserSongDislike.FirstOrDefaultAsync(u => u.UserId == userId && u.SongId == model.Id);
+                    _db.UserSongDislike.Remove(dislikeData);
+                    newSong.SongDisLike -= 1;
+                    newSong.SongLike += 1;
+                }
+
+                _db.Song.Update(newSong);
+                _db.UserSongLike.Add(new UserSongLike { UserId = userId, SongId = model.Id });
+                await _db.SaveChangesAsync();
+                likeSong = true;
+            }
+
+            return likeSong;
+        }
+
+        //Youtube dislike song logic
+        public async Task<bool> YoutubeDisikeSong(SongModel model, string userId)
+        {
+            var dislikeSong = false;
+            var userSongDislike = await _db.UserSongDislike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+            if (!userSongDislike)
+            {
+                var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                var userSongLike = await _db.UserSongLike.AnyAsync(u => u.UserId == userId && u.SongId == model.Id);
+                if (!userSongLike)
+                {
+                    newSong.SongDisLike += 1;
+                }
+                else
+                {
+                    var likeData = await _db.UserSongLike.FirstOrDefaultAsync(u => u.UserId == userId && u.SongId == model.Id);
+                    _db.UserSongLike.Remove(likeData);
+                    newSong.SongLike -= 1;
+                    newSong.SongDisLike += 1;
+                }
+
+
                 _db.Song.Update(newSong);
                 _db.UserSongDislike.Add(new UserSongDislike { UserId = userId, SongId = model.Id });
                 await _db.SaveChangesAsync();
