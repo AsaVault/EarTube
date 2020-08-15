@@ -28,6 +28,7 @@ AjaxPost = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+                    location.reload();
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
