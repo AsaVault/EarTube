@@ -219,10 +219,14 @@ namespace EarTube.Controllers
             ViewBag.IsSuccess = TempData["Alert"];
             ViewBag.LikeSuccess = TempData["LikeAlert"];
             ViewBag.IsLikeSuccess = TempData["AlreadyLikeAlert"];
+            ViewBag.DislikeSuccess = TempData["DislikeAlert"];
+            ViewBag.IsDislikeSuccess = TempData["AlreadyDislikeAlert"];
             TempData["Alert"] = false;
             TempData["LikeAlert"] = false;
             TempData["AlreadyLikeAlert"] = false;
-            
+            TempData["DislikeAlert"] = false;
+            TempData["AlreadyDislikeAlert"] = false;
+
             //data.UserId = userId;
 
             return View(data);
@@ -302,6 +306,60 @@ namespace EarTube.Controllers
             return NotFound();
         }
 
+        //Youtube Like song
+        [Route("youtube-like-song/{id}", Name = "youtubeLikeSong")]
+
+        public async Task<IActionResult> YoutubeLikeSong(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            bool youtubeLikeSong = await _songRepository.YoutubeLikeSong(data, userId);
+            //data.SongLike += 1;
+            if (youtubeLikeSong)
+            {
+                TempData["LikeAlert"] = true;
+                TempData["AlreadyLikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["LikeAlert"] = false;
+            TempData["AlreadyLikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
+        }
+
+        //Youtube Dislike song logic
+        //Youtube Like song
+        [Route("youtube-dislike-song/{id}", Name = "youtubeDislikeSong")]
+
+        public async Task<IActionResult> YoutubeDislikeSong(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            bool youtubeDislikeSong = await _songRepository.YoutubeDisikeSong(data, userId);
+            //data.SongLike += 1;
+            if (youtubeDislikeSong)
+            {
+                TempData["DislikeAlert"] = true;
+                TempData["AlreadyDislikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["DislikeAlert"] = false;
+            TempData["AlreadyDislikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
+        }
+
+        //Like Song New
         [Route("like-song/{id}", Name = "likeSong")]
 
         public async Task<IActionResult> LikeSong(int? id)
@@ -346,6 +404,32 @@ namespace EarTube.Controllers
 
 
             return NotFound();
+        }
+
+        //Song Dislike
+        [Route("dislike-song/{id}", Name = "dislikeSong")]
+
+        public async Task<IActionResult> DislikeSong(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var data = await _songRepository.GetSongById(id);
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            bool dislikeSong = await _songRepository.DisikeSong(data, userId);
+            //data.SongLike += 1;
+            if (dislikeSong)
+            {
+                TempData["DislikeAlert"] = true;
+                TempData["AlreadyDislikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["DislikeAlert"] = false;
+            TempData["AlreadyDislikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)

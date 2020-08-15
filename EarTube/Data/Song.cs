@@ -17,6 +17,7 @@ namespace EarTube.Models
         public string Genre { get; set; }
         public string Like { get; set; }
         public int SongLike { get; set; }
+        public int SongDisLike { get; set; }
         public string Description { get; set; }
         public string CoverImageUrl { get; set; }
         public string SongUrl { get; set; }
