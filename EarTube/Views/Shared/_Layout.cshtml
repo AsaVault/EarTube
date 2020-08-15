@@ -30,7 +30,7 @@
                         <a class="navbar-brand text-muted" asp-area="" asp-controller="Song" asp-action="GetSongByUser">My Songs</a>
                         @*<a class="navbar-brand ml-4 text-muted" asp-area="" asp-controller="Song" asp-action="AddNewSong"><i class="fa fa-upload" aria-hidden="true"></i></a>*@
                         @*<a class="navbar-brand ml-4 text-muted" asp-area="" asp-controller="Song" asp-action="AddOrEdit"><i class="fa fa-upload" aria-hidden="true"></i></a>*@
-                        <a class="navbar-brand ml-4 text-muted btn-click" onclick="showInPopup('@Url.Action("AddOrEdit","Song",null,Context.Request.Scheme)','New Song Upload')"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                        <a class="navbar-brand ml-4 text-muted btn-click" onclick="showInPopup('@Url.Action("AddOrEdit","Song",null,Context.Request.Scheme)','New Song Upload')"><i class="fa fa-upload" aria-hidden="true"> <span class="px-2">Upload</span></i></a>
                     </div>
                 }
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">

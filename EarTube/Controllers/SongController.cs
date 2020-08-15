@@ -31,16 +31,17 @@ namespace EarTube.Controllers
             _userManager = userManager;
         }
 
-        public async Task<ViewResult> GetAllSongs(bool isSuccess, int songId)
+        public async Task<ViewResult> GetAllSongs(bool isSuccess, int? songId)
 
         {
             //var userId = _userManager.GetUserId(this.HttpContext.User);
             var datas = await _songRepository.GetAllSongs();
 
             ViewBag.IsSuccess = TempData["Alert"];
+            ViewBag.SongId = TempData["SongID"];
             //isSuccess = false;
             TempData["Alert"] = false;
-            ViewBag.SongId = songId;
+            TempData["SongID"] = 0;
 
             //foreach (var data in datas)
             //{
@@ -162,15 +163,18 @@ namespace EarTube.Controllers
                             songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
                         }
 
-                        ViewBag.IsSuccess = isSuccess;
-                        ViewBag.SongId = songId;
+                        
 
                         int id = await _songRepository.AddNewSong(songModel);
                         if (id > 0)
                         {
                             TempData["Alert"] = true;
+                            TempData["SongID"] = id;
                             //return RedirectToAction(nameof(GetAllSongs), new { songId = Id });
                         }
+
+                        //ViewBag.IsSuccess = isSuccess;
+                        //ViewBag.SongId = id;
                     }
                     //return View();
                 }

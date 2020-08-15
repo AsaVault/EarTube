@@ -59,7 +59,7 @@ namespace EarTube.Controllers
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_AddComment", _db.Comment.ToListAsync()) });
             }
             // JSON Return
-            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddComment", comment) });
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "_AddComment", comment) });
         }
 
     }

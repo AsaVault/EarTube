@@ -6,8 +6,8 @@
 
 @foreach (var song in Model)
 {
-    <div class="col-md-4">
-        <div class="card mb-4 shadow-sm">
+    
+        <div class="card mb-4 shadow-sm mx-md-3">
             <a asp-route="songDetails" asp-route-id="@song.Id">
                 <img src="@(string.IsNullOrEmpty(song.CoverImageUrl) ? "/images/unsplash.jpg" : song.CoverImageUrl)" class="img-thumbnail" style="width:340px; height:145px; " />
             </a>
@@ -16,7 +16,6 @@
                 <p class="card-text text-muted">Uploaded by: @(song?.User?.FirstName + " " + song?.User?.LastName) </p>
             </div>
         </div>
-    </div>
     
 }
 
