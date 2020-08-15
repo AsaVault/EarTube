@@ -26,7 +26,7 @@ namespace EarTube.Models
         public string Description { get; set; }
         //[Required(ErrorMessage = "Please choose the language of your book")]
 
-        [Display(Name = "Choose the cover photo of your song")]
+        [Display(Name = "Choose cover photo")]
         //[Required]
         public IFormFile CoverPhoto { get; set; }
         public string CoverImageUrl { get; set; }
@@ -36,7 +36,7 @@ namespace EarTube.Models
 
         [MyUploadFileSizeValidator(sizeInBytes: size * 1024 * 1024,
                                ErrorMessage = "Image filesize should be smaller than 5 MB")]
-        [Display(Name = "Upload your song in digital format")]
+        [Display(Name = "Upload your song")]
         [Required]
         public IFormFile SongFile { get; set; }
         public string SongUrl { get; set; }

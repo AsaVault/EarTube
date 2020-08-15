@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EarTube.Areas.Identity.Data;
 using EarTube.Data;
+using EarTube.Helpers;
 using EarTube.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,8 +40,6 @@ namespace EarTube.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AddComment(Comment comment, bool isSuccess = false)
         {
-            
-
             var userId = _userManager.GetUserId(this.HttpContext.User);
             comment.UserId = userId;
 
@@ -55,13 +54,12 @@ namespace EarTube.Controllers
                 //comment.Description = " ";
                 ViewBag.IsSuccess = isSuccess;
                 TempData["Alert"] = true;
-                return RedirectToAction("GetSong", "Song", new {id =comment.SongId } );
-                //return View(comment);
-                //return RedirC:\Users\User\source\repos\EarTube\EarTube\Views\Song\GetSong.cshtmlect("song-details/{id}" );
-                //return RedirectToRoute("song-details/{id}");
-            }
 
-            return View();
+                //Adding Json here
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_AddComment", _db.Comment.ToListAsync()) });
+            }
+            // JSON Return
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "_AddComment", comment) });
         }
 
     }

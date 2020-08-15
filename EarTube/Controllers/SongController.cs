@@ -1,4 +1,5 @@
 ﻿using EarTube.Areas.Identity.Data;
+using EarTube.Helpers;
 using EarTube.Models;
 using EarTube.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -30,16 +31,17 @@ namespace EarTube.Controllers
             _userManager = userManager;
         }
 
-        public async Task<ViewResult> GetAllSongs(bool isSuccess, int songId)
+        public async Task<ViewResult> GetAllSongs(bool isSuccess, int? songId)
 
         {
             //var userId = _userManager.GetUserId(this.HttpContext.User);
             var datas = await _songRepository.GetAllSongs();
 
             ViewBag.IsSuccess = TempData["Alert"];
+            ViewBag.SongId = TempData["SongID"];
             //isSuccess = false;
             TempData["Alert"] = false;
-            ViewBag.SongId = songId;
+            TempData["SongID"] = 0;
 
             //foreach (var data in datas)
             //{
@@ -71,7 +73,6 @@ namespace EarTube.Controllers
         public ViewResult AddNewSong(/*bool isSuccess = false, int songId = 0*/)
         {
             var model = new SongModel();
-
             //ViewBag.IsSuccess = isSuccess;
             //ViewBag.SongId = songId;
             return View(model);
@@ -91,14 +92,10 @@ namespace EarTube.Controllers
                     songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
                 }
 
-
-
                 if (songModel.SongFile != null)
                 {
-
                     string folder = "songs/songfiles/";
                     songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
-
                 }
 
                 ViewBag.IsSuccess = isSuccess;
@@ -115,6 +112,99 @@ namespace EarTube.Controllers
 
             return View();
         }
+
+        //AddOrEdit Action Method
+        public async Task<IActionResult> AddOrEdit( int? songId = 0, bool isSuccess = false)
+        {
+            if(songId == 0)
+            {
+                var model = new SongModel();
+                return View(model);
+            }
+            else
+            {
+                ViewBag.IsSuccess = isSuccess;
+                ViewBag.SongId = songId;
+                if (songId == null)
+                {
+                    return NotFound();
+                }
+                var data = await _songRepository.GetSongById(songId);
+                if (data == null)
+                {
+                    return NotFound();
+                }
+                return View(data);
+            }
+        }
+
+        //Post AddOrEdit/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrEdit(SongModel songModel, bool isSuccess = false, int songId = 0)
+        {
+            if (ModelState.IsValid)
+            {
+                if(songId == 0)
+                {
+                    var userId = _userManager.GetUserId(this.HttpContext.User);
+                    songModel.UserId = userId;
+                    if (ModelState.IsValid)
+                    {
+                        if (songModel.CoverPhoto != null)
+                        {
+                            string folder = "songs/cover/";
+                            songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                        }
+
+                        if (songModel.SongFile != null)
+                        {
+                            string folder = "songs/songfiles/";
+                            songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                        }
+
+                        
+
+                        int id = await _songRepository.AddNewSong(songModel);
+                        if (id > 0)
+                        {
+                            TempData["Alert"] = true;
+                            TempData["SongID"] = id;
+                            //return RedirectToAction(nameof(GetAllSongs), new { songId = Id });
+                        }
+
+                        //ViewBag.IsSuccess = isSuccess;
+                        //ViewBag.SongId = id;
+                    }
+                    //return View();
+                }
+                else
+                {
+                    if (songModel.CoverPhoto != null)
+                    {
+                        string folder = "songs/cover/";
+                        songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                    }
+
+                    if (songModel.SongFile != null)
+                    {
+                        string folder = "songs/songfiles/";
+                        songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                    }
+
+                    await _songRepository.EditSong(songModel);
+                    //if (id > 0)
+                    //{
+                    //    //return RedirectToAction(nameof(EditSong), new { isSuccess = true, songId = id });
+                    //    //return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "GetAllSongs", _songRepository.GetAllSongs()) });
+                    //}
+                }
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _songRepository.GetAllSongs()) });
+            }
+            //return View(songModel);
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
+        }
+        
 
         [Route("song-details/{id}", Name = "songDetails")]
         public async Task<ViewResult> GetSong(int id, bool isSuccess)
@@ -278,7 +368,6 @@ namespace EarTube.Controllers
             {
                 return NotFound();
             }
-
             var data = await _songRepository.GetSongById(id);
             var userId = _userManager.GetUserId(this.HttpContext.User);
             bool likeSong = await _songRepository.LikeSong(data, userId);
