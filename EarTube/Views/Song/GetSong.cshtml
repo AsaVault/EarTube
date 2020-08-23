@@ -41,8 +41,8 @@
             </div>
         }
 
-  
-    
+
+
 
         @* Dislike Alert *@
         @if (ViewBag.IsDislikeSuccess == true)
@@ -71,22 +71,16 @@
                     <div class="col-md-12">
                         <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg": Model.CoverImageUrl)" class="img-thumbnail" style="width: 640px; height: 420px; left: 0px; top: 0px;" />
                         <h5 class="text-uppercase my-2"><strong>@Model.Title</strong></h5>
-
-                        <div class="col-md-2 mt-3">
-                            <div class="">
-                                <a class="btn btn-outline-primary" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
-                                    Download
-                                </a>
+                        <div class="row col-12 mt-3">
+                            <div class="col-md-2 ">
+                                <div class="">
+                                    <a class="btn btn-outline-primary @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "disabled")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
+                                        Download
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                            <div class="col-md-8 ml-0">
-
-                                @*<div class="btn-group">
-                    <a asp-route="songDetails" asp-route-id="@Model.Id"
-                       class="btn btn-sm btn-outline-secondary"><i class="fas fa-list-alt"></i></a>
-                </div>*@
-
+                            <div class="col-md-10 ml-0">
 
                                 @if (UserManager.GetUserId(User).ToString() == Model.UserId)
                                 {
@@ -94,38 +88,39 @@
                                         @*<a asp-route="editSong" asp-route-id="@Model.Id"*@
                                         @*<a asp-controller="Song" asp-action="AddOrEdit" asp-route-songId="@Model.Id"*@
                                         <a onclick="showInPopup('@Url.Action("AddOrEdit","Song",new { songId = Model.Id},Context.Request.Scheme)','Edit Song Upload')"
-                                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>
+                                           class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
                                     </div>
                                     <div class="btn-group">
                                         <a asp-route="deleteSong" asp-route-id="@Model.Id"
-                                           class="btn btn-sm btn-outline-secondary"><i class="fas fa-trash"></i></a>
+                                           class="btn btn-sm btn-outline-primary"><i class="fas fa-trash"></i></a>
                                     </div>
                                 }
 
 
                                 @*<small class="text-muted p-1">
-                    <a asp-route="likeSong" asp-route-id="@Model.Id"
-                       class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
-                </small>*@
+                                        <a asp-route="likeSong" asp-route-id="@Model.Id"
+                                           class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
+                                    </small>*@
 
                                 <span class="text-muted p-1">
                                     <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
                                        class="pl-1"><i class="fas fa-thumbs-up fa-6"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
                                 </span>
 
-                                @if (UserManager.GetUserId(User).ToString() != Model.UserId)
-                                {
+                                @*@if (UserManager.GetUserId(User).ToString() != Model.UserId)
+                                    {
 
-                                    @*<small class="text-muted p-1">
-                        <a asp-route="dislikeSong" asp-route-id="@Model.Id"
-                           class="pl-1"><i class="fas fa-thumbs-down"><span class="px-1">@Model.SongDisLike.ToString()</span></i></a>
-                    </small>*@
+                                        <span class="text-muted p-1 ">
+                                            <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
+                                               class="pl-1"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
+                                        </span>
+                                    }*@
 
-                                    <span class="text-muted p-1 ">
-                                        <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
-                                           class="pl-1"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
-                                    </span>
-                                }
+
+                                <span class="text-muted p-1 ">
+                                    <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
+                                       class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
+                                </span>
 
                                 <span class="text-muted p-1">
                                     <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
@@ -137,18 +132,16 @@
 
                                 @*<small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Like) ? "No Likes" : "Likes : " + Model.Like)</small>*@
                             </div>
-
-
-                        
+                        </div>
                     </div>
 
                 </div>
             </div>
 
-            
+
             @*Buttons*@
 
-            
+
         </div>
 
 
@@ -165,43 +158,43 @@
             </div>
             @* Check this place out... *@
             @*<form method="post" asp-action="AddComment" asp-controller="Comment">
-                <input asp-for="Comments.SongId" type="hidden" />
-                <div class="form-group">
-                    <label asp-for="Comments.Description" class="control-label"></label>
-                    <input asp-for="Comments.Description" class="form-control" />
-                </div>
+                    <input asp-for="Comments.SongId" type="hidden" />
+                    <div class="form-group">
+                        <label asp-for="Comments.Description" class="control-label"></label>
+                        <input asp-for="Comments.Description" class="form-control" />
+                    </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Comment" class="btn btn-primary" />
+                    <div class="form-group">
+                        <input type="submit" value="Comment" class="btn btn-primary" />
 
-                </div>
-                <div class="form-group">
-                    <a asp-route="songDetails" asp-route-id="@Model.Comments.SongId">Back</a>
-                </div>
-            </form>*@
+                    </div>
+                    <div class="form-group">
+                        <a asp-route="songDetails" asp-route-id="@Model.Comments.SongId">Back</a>
+                    </div>
+                </form>*@
         </div>
     </div>
     <div class="row my-1">
 
-        @await Html.PartialAsync("_AddComment", Model) 
+        @await Html.PartialAsync("_AddComment", Model)
         @*<div class="col-md-10">
-            @foreach (var comment in Model.Comment)
-            {
+                @foreach (var comment in Model.Comment)
+                {
 
-                <partial name="_CommentPartial" model="@comment" />
-
-                
-                <h6>@comment.User.FirstName</h6>
-                <div class="pb-3">
+                    <partial name="_CommentPartial" model="@comment" />
 
 
-                    <h6 class="text-primary text-capitalize">@comment?.User?.FirstName</h6>
-                    <p class="pl-2">@comment.Description</p>
+                    <h6>@comment.User.FirstName</h6>
+                    <div class="pb-3">
 
-                </div>
 
-            }
-        </div>*@
+                        <h6 class="text-primary text-capitalize">@comment?.User?.FirstName</h6>
+                        <p class="pl-2">@comment.Description</p>
+
+                    </div>
+
+                }
+            </div>*@
     </div>
 </div>
 
