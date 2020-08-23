@@ -7,11 +7,11 @@
 @foreach (var song in Model)
 {
     
-        <div class="card mb-4 shadow-sm mx-md-3">
+        <div class="card mb-md-5 shadow-sm mx-md-2 " >
             <a asp-route="songDetails" asp-route-id="@song.Id">
-                <img src="@(string.IsNullOrEmpty(song.CoverImageUrl) ? "/images/unsplash.jpg" : song.CoverImageUrl)" class="img-thumbnail" style="width:340px; height:145px; " />
+                <img src="@(string.IsNullOrEmpty(song.CoverImageUrl) ? "/images/unsplash.jpg" : song.CoverImageUrl)" class="img-thumbnail p-0 border-0" style="width:340px; height:145px; " />
             </a>
-            <div class="card-body">
+            <div class="card-body p-md-2">
                 <p class="card-title text-uppercase"><strong>@(string.IsNullOrEmpty(song.Title) ? "Name is not available" : song.Title)</strong></p>
                 <p class="card-text text-muted">Uploaded by: @(song?.User?.FirstName + " " + song?.User?.LastName) </p>
             </div>

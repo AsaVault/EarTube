@@ -34,13 +34,13 @@ namespace EarTube
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
-
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<SongRepository, SongRepository>();
             services.AddTransient<ApplicationUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +52,8 @@ namespace EarTube
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            dbInitializer.Initialize();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
