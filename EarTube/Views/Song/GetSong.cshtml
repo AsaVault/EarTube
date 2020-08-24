@@ -64,58 +64,44 @@
                 </button>
             </div>
         }
-        <div class="row ">
-            <div class="col-md-9">
+    <div class="row ">
+        <div class="col-md-8">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg": Model.CoverImageUrl)" class="img-thumbnail" style="width: 640px; height: 420px; left: 0px; top: 0px;" />
-                        <h5 class="text-uppercase my-2"><strong>@Model.Title</strong></h5>
-                        <div class="row col-12 mt-3">
-                            <div class="col-md-2 ">
-                                <div class="">
-                                    <a class="btn btn-outline-primary @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "disabled")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
-                                        Download
-                                    </a>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg": Model.CoverImageUrl)" class="img-thumbnail" style="width: 740px; height: 420px; left: 0px; top: 0px;" />
+                    <h5 class="text-capitalize my-2 pl-4"><span>@Model.Title</span></h5>
+                    <div class="row col-12 mt-3">
+                        <div class="col-md-2 py-2 h6 ">
+                            <span class=" text-muted">@Model.SongView.ToString()  Views.</span>
+                        </div>
+                        <div class="col-md-2 ">
+                            <a class="btn btn-outline-primary p-2@((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "disabled")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
+                                Download
+                            </a>
+                        </div>
+
+                        <div class="col-md-8 p-0 py-1">
+
+                            @if (UserManager.GetUserId(User).ToString() == Model.UserId)
+                            {
+                                <div class="btn-group">
+                                    @*<a asp-route="editSong" asp-route-id="@Model.Id"*@
+                                    @*<a asp-controller="Song" asp-action="AddOrEdit" asp-route-songId="@Model.Id"*@
+                                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Song",new { songId = Model.Id},Context.Request.Scheme)','Edit Song Upload')"
+                                       class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
                                 </div>
-                            </div>
+                                <div class="btn-group">
+                                    <a asp-route="deleteSong" asp-route-id="@Model.Id"
+                                       class="btn btn-sm btn-outline-primary"><i class="fas fa-trash"></i></a>
+                                </div>
+                            }
 
-                            <div class="col-md-10 ml-0">
-
-                                @if (UserManager.GetUserId(User).ToString() == Model.UserId)
-                                {
-                                    <div class="btn-group">
-                                        @*<a asp-route="editSong" asp-route-id="@Model.Id"*@
-                                        @*<a asp-controller="Song" asp-action="AddOrEdit" asp-route-songId="@Model.Id"*@
-                                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Song",new { songId = Model.Id},Context.Request.Scheme)','Edit Song Upload')"
-                                           class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
-                                    </div>
-                                    <div class="btn-group">
-                                        <a asp-route="deleteSong" asp-route-id="@Model.Id"
-                                           class="btn btn-sm btn-outline-primary"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                }
-
-
-                                @*<small class="text-muted p-1">
-                                        <a asp-route="likeSong" asp-route-id="@Model.Id"
-                                           class="pl-1"><i class="fas fa-thumbs-up"><span class="px-1">@Model.SongLike.ToString()</span></i></a>
-                                    </small>*@
-
+                            <span id="buttons">
                                 <span class="text-muted p-1">
                                     <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
                                        class="pl-1"><i class="fas fa-thumbs-up fa-6"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
                                 </span>
-
-                                @*@if (UserManager.GetUserId(User).ToString() != Model.UserId)
-                                    {
-
-                                        <span class="text-muted p-1 ">
-                                            <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
-                                               class="pl-1"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
-                                        </span>
-                                    }*@
-
 
                                 <span class="text-muted p-1 ">
                                     <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
@@ -126,76 +112,46 @@
                                     <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
                                        class="px-1"><i class="fas fa-share fa-6"></i></a>
                                 </span>
-
+                            </span>
+                            <span id="info" class="offset-1">
                                 <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Genre) ? "Genre: NA" : Model.Genre)</small>
-                                <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Artist) ? "NA" : Model.Artist)</small>
-
-                                @*<small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Like) ? "No Likes" : "Likes : " + Model.Like)</small>*@
-                            </div>
+                                <small class="text-light bg-primary p-1 ml-1">@(string.IsNullOrEmpty(Model.Artist) ? "NA" : Model.Artist)</small>
+                            </span>
+                            @*<small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Like) ? "No Likes" : "Likes : " + Model.Like)</small>*@
                         </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            <div class="border-top"></div>
+            <div class="row p-4 col-md-12">
+                <div class="d-flex justify-content-between align-items-center my-3">
+                    <div class="btn-group">
+                        @*<a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"*@
+                        <a onclick="showInPopup('@Url.Action("AddComment","Comment",new {songId=Model.Id},Context.Request.Scheme)','Add Comment')"
+                           class="btn btn-sm btn-outline-secondary">Click to Comment <i class="fas fa-comment"></i></a>
                     </div>
 
                 </div>
             </div>
-
-
-            @*Buttons*@
-
-
+            <div class="border-top mb-4"></div>
+            <div class="row my-1">
+                @await Html.PartialAsync("_AddComment", Model)
+            </div>
         </div>
 
 
+        @*Buttons*@
+        
+
+    </div>
 
         <hr />
 
     </div>
-    <div class="row">
-        <div class="d-flex justify-content-between align-items-center my-3">
-            <div class="btn-group">
-                @*<a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"*@
-                <a onclick="showInPopup('@Url.Action("AddComment","Comment",new {songId=Model.Id},Context.Request.Scheme)','Add Comment')"
-                   class="btn btn-sm btn-outline-secondary">Click to Comment <i class="fas fa-comment"></i></a>
-            </div>
-            @* Check this place out... *@
-            @*<form method="post" asp-action="AddComment" asp-controller="Comment">
-                    <input asp-for="Comments.SongId" type="hidden" />
-                    <div class="form-group">
-                        <label asp-for="Comments.Description" class="control-label"></label>
-                        <input asp-for="Comments.Description" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <input type="submit" value="Comment" class="btn btn-primary" />
-
-                    </div>
-                    <div class="form-group">
-                        <a asp-route="songDetails" asp-route-id="@Model.Comments.SongId">Back</a>
-                    </div>
-                </form>*@
-        </div>
-    </div>
-    <div class="row my-1">
-
-        @await Html.PartialAsync("_AddComment", Model)
-        @*<div class="col-md-10">
-                @foreach (var comment in Model.Comment)
-                {
-
-                    <partial name="_CommentPartial" model="@comment" />
-
-
-                    <h6>@comment.User.FirstName</h6>
-                    <div class="pb-3">
-
-
-                        <h6 class="text-primary text-capitalize">@comment?.User?.FirstName</h6>
-                        <p class="pl-2">@comment.Description</p>
-
-                    </div>
-
-                }
-            </div>*@
-    </div>
+    
+    
 </div>
 
 @section Scripts{
