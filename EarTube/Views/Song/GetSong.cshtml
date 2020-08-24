@@ -76,7 +76,7 @@
                             <span class=" text-muted">@Model.SongView.ToString()  Views.</span>
                         </div>
                         <div class="col-md-2 ">
-                            <a class="btn btn-outline-primary p-2@((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "disabled")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
+                            <a class="btn btn-outline-primary p-2@((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": " d-none")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
                                 Download
                             </a>
                         </div>
@@ -109,7 +109,7 @@
                                 </span>
 
                                 <span class="text-muted p-1">
-                                    <a asp-route="songDetailsRoute" asp-route-id="@Model.Id"
+                                    <a asp-route="shareSong" asp-route-id="@Model.Id"
                                        class="px-1"><i class="fas fa-share fa-6"></i></a>
                                 </span>
                             </span>
