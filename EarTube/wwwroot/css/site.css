@@ -58,12 +58,13 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #adafae;
 }
 
     a.btn-click:hover {
         cursor: pointer !important;
     }
+
 
 .btn-primary {
   color: #fff;

@@ -24,7 +24,6 @@ namespace EarTube.Models
         public int SongDisLike { get; set; }
         [StringLength(500)]
         public string Description { get; set; }
-        //[Required(ErrorMessage = "Please choose the language of your book")]
 
         [Display(Name = "Choose cover photo")]
         //[Required]

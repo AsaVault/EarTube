@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace EarTube.Areas.Identity.Data
@@ -15,5 +16,7 @@ namespace EarTube.Areas.Identity.Data
 
         [PersonalData]
         public string LastName { get; set; }
+
+        public IFormFile CoverPhoto { get; set; }
     }
 }

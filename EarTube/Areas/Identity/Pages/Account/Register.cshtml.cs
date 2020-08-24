@@ -46,27 +46,28 @@ namespace EarTube.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Enter your first name")]
             [DataType(DataType.Text)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Enter your last name")]
             [DataType(DataType.Text)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Enter a valid email address")]
+            [EmailAddress(ErrorMessage = "Please enter a valid email address")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Enter password")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Confirm password")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
