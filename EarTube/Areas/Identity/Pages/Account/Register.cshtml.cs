@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using static System.Net.WebRequestMethods;
 
 namespace EarTube.Areas.Identity.Pages.Account
 {
@@ -24,17 +28,19 @@ namespace EarTube.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [BindProperty]
@@ -66,7 +72,10 @@ namespace EarTube.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
-
+            [Required(ErrorMessage ="upload a cover image")]
+            [Display(Name = "Cover Image")]
+            public IFormFile CoverPhoto { get; set; }
+            public string UserImageUrl { get; set; }
             [Required(ErrorMessage = "Confirm password")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
@@ -90,7 +99,13 @@ namespace EarTube.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName };
+                
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName , CoverPhoto = Input.CoverPhoto, UserImageUrl=Input.UserImageUrl};
+                if (user.CoverPhoto != null)
+                {
+                    string folder = "users/cover/";
+                    user.UserImageUrl = await UploadImage(folder, user.CoverPhoto);
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -125,6 +140,17 @@ namespace EarTube.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task<string> UploadImage(string folder, IFormFile coverPhoto)
+        {
+            folder += Guid.NewGuid().ToString() + "_" + coverPhoto.FileName;
+
+            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+
+            await coverPhoto.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+            return "/" + folder;
         }
     }
 }

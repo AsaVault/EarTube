@@ -22,7 +22,7 @@ namespace EarTube.Areas.Identity
                         context.Configuration.GetConnectionString("DbContextConnection")));
 
                 services.AddDefaultIdentity<ApplicationUser>(options => {
-                    options.SignIn.RequireConfirmedAccount = true;
+                    options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                 })

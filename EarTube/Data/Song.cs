@@ -21,6 +21,11 @@ namespace EarTube.Models
         public string Description { get; set; }
         public string CoverImageUrl { get; set; }
         public string SongUrl { get; set; }
+        public int SongView { get; set; }
+        public int Subscriber { get; set; }
+        [NotMapped]
+        public DateTime FromCreation { get; set; }
+
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public List<Comment> Comment { get; set; }

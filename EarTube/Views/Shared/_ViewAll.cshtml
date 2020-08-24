@@ -14,7 +14,7 @@
             <div class="card-body p-md-2">
                 <div id="details" class="row col-md-12">
                     <div class="col-md-2 p-1 align-items-center">
-                        <img src="@(string.IsNullOrEmpty(song.CoverImageUrl) ? "/images/unsplash.jpg" : song.CoverImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid border-0" />
+                        <img src="@(string.IsNullOrEmpty(song?.User?.UserImageUrl) ? "/images/Avatar.png" : song.User.UserImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid border-0" />
                     </div>
                     <div class="col-md-10 p-md-2">
                         <p class="card-title text-capitalize pb-2 m-0"><a asp-route="songDetails" asp-route-id="@song.Id"><span>@(string.IsNullOrEmpty(song.Title) ? "Name is not available" : song.Title)</span></a></p>

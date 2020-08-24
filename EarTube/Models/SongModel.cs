@@ -22,6 +22,12 @@ namespace EarTube.Models
         private const  int size  = 5;
         public int SongLike { get; set; }
         public int SongDisLike { get; set; }
+        [Display(Name = "View")]
+        public int SongView { get; set; }
+        [Display(Name = "Subscribe")]
+        public int Subscriber { get; set; }
+        public DateTime FromCreation { get; set; }
+        
         [StringLength(500)]
         public string Description { get; set; }
 

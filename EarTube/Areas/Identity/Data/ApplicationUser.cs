@@ -16,7 +16,8 @@ namespace EarTube.Areas.Identity.Data
 
         [PersonalData]
         public string LastName { get; set; }
-
+        public string UserImageUrl { get; set; }
+        [NotMapped]
         public IFormFile CoverPhoto { get; set; }
     }
 }

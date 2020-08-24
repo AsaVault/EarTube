@@ -40,7 +40,10 @@ namespace EarTube.Repository
                       SongUrl = song.SongUrl,
                       CoverImageUrl = song.CoverImageUrl,
                       SongLike = song.SongLike,
-                      SongDisLike = song.SongDisLike
+                      SongDisLike = song.SongDisLike,
+                      SongView = song.SongView,
+                      Subscriber = song.Subscriber,
+                      FromCreation = song.FromCreation
                   }).ToListAsync();
         }
 
@@ -61,7 +64,10 @@ namespace EarTube.Repository
                       SongUrl = song.SongUrl,
                       CoverImageUrl = song.CoverImageUrl,
                       SongLike = song.SongLike,
-                      SongDisLike = song.SongDisLike
+                      SongDisLike = song.SongDisLike,
+                      SongView = song.SongView,
+                      Subscriber = song.Subscriber,
+                      FromCreation = song.FromCreation
                   }).ToListAsync();
         }
 
@@ -80,7 +86,10 @@ namespace EarTube.Repository
                 SongUrl = model.SongUrl,
                 UserId = model.UserId,
                 User = model.User,
-                CoverImageUrl = model.CoverImageUrl
+                CoverImageUrl = model.CoverImageUrl,
+                SongView = model.SongView,
+                Subscriber = model.Subscriber,
+                FromCreation = model.FromCreation 
             };
 
             //newSong.Comment = new List<Comment>();
