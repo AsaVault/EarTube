@@ -16,13 +16,15 @@
             <p class="pl-2 pb-1 m-0">@comment.Description</p>
             <span id="buttons" class="p-1">
                 <span class="text-muted">
-                    <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
-                       class="pl-1"><i class="fas fa-thumbs-up"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
+                    <a asp-route="likeComment" asp-route-id="@comment.Id"
+                       data-ajax="true" data-ajax-success="AjaxSuccess"
+                       class="pl-1"><i class="fas fa-thumbs-up"><span class="px-2  ">@comment.CommentLikes.ToString()</span></i></a>
                 </span>
 
                 <span class="text-muted">
-                    <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
-                       class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
+                    <a asp-route="dislikeComment" asp-route-id="@comment.Id"
+                       data-ajax="true" data-ajax-success="AjaxSuccess"
+                       class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down"><span class="px-2">@comment.CommentDisikes.ToString()</span></i></a>
                 </span>
 
             </span>
@@ -30,3 +32,11 @@
     </div>
     }
 </div>
+
+@section scripts {
+    <script>
+        
+
+    </script>
+
+}

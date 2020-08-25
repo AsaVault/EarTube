@@ -100,11 +100,13 @@
                             <span id="buttons">
                                 <span class="text-muted p-1">
                                     <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
+                                       data-ajax="true" data-ajax-success="AjaxSuccess"
                                        class="pl-1"><i class="fas fa-thumbs-up fa-6"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
                                 </span>
 
                                 <span class="text-muted p-1 ">
                                     <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
+                                       data-ajax="true" data-ajax-success="AjaxSuccess"
                                        class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
                                 </span>
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using EarTube.Areas.Identity.Data;
 using EarTube.Data;
+using EarTube.Repository;
+using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -20,7 +22,7 @@ namespace EarTube.Areas.Identity
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("DbContextConnection")));
-
+                services.AddTransient<IComment, CommentRepository>();
                 services.AddDefaultIdentity<ApplicationUser>(options => {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireLowercase = false;

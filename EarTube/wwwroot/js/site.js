@@ -56,3 +56,9 @@ $(function () {
         $("#loaderbody").addClass('hide');
     });
 });
+
+
+function AjaxSuccess() {
+            location.reload();
+    }
+

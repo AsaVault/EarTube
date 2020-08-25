@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EarTube.Areas.Identity.Data;
 using EarTube.Repository;
+using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,7 @@ namespace EarTube
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
+            //services.AddTransient<IComment, CommentRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<SongRepository, SongRepository>();
             services.AddTransient<ApplicationUser>();

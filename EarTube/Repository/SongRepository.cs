@@ -306,7 +306,9 @@ namespace EarTube.Repository
                          Id = g.Id,
                          Title = g.Title,
                          Description = g.Description,
-                         User = g.User
+                         User = g.User,
+                         CommentDisikes = g.CommentDisikes,
+                         CommentLikes = g.CommentLikes
                      }).ToList()
                  }).FirstOrDefaultAsync();
         }

@@ -15,5 +15,7 @@ namespace EarTube.Models
         public Song Song { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+        public int CommentLikes { get; set; }
+        public int CommentDisikes { get; set; }
     }
 }
