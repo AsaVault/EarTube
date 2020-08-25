@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SongModel>
+
+
+<div class="col-md-12">
+    <div class="border-top"></div>
+    <p class="my-4">Most Viewed Songs</p>
+
+    @foreach (var song in Model)
+    {
+        if (song.SongView > 10)
+        {
+            <div class="row mb-5">
+                
+                    <div class="col-md-6">
+                        <img src="@(string.IsNullOrEmpty(song.CoverImageUrl)? "/images/unsplash.jpg": song.CoverImageUrl) " class="img-fluid" style="width:168px; height:94px;" />
+                    </div>
+                    <div class="col-md-6">
+                        <p>@song?.Title</p>
+                        <p>@(song?.User?.FirstName  + " " + song?.User?.LastName) </p>
+                        <div id="bottom">
+                            <span>@song?.SongView</span>
+                            @{
+                                var show = song.CreatedOn - DateTime.UtcNow;
+                                <span> @show.Value </span>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                
+        }
+
+    }
+
+</div>

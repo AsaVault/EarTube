@@ -35,7 +35,7 @@ namespace EarTube.Models
         //[Required]
         public IFormFile CoverPhoto { get; set; }
         public string CoverImageUrl { get; set; }
-
+        public DateTime? CreatedOn { get; set; }
         public List< CommentModel> Comment { get; set; }
         public CommentModel Comments { get; set; }
 

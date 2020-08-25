@@ -40,11 +40,38 @@ namespace EarTube.Repository
                       SongUrl = song.SongUrl,
                       CoverImageUrl = song.CoverImageUrl,
                       SongLike = song.SongLike,
+                      CreatedOn = song.CreatedOn,
                       SongDisLike = song.SongDisLike,
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
                       FromCreation = song.FromCreation
                   }).OrderByDescending(song=>song.Id).ToListAsync();
+        }
+
+
+        public async Task<List<SongModel>> HotSongs()
+        {
+
+            return await _db.Song.Include(a => a.User)
+                  .Select(song => new SongModel()
+                  {
+                      Title = song.Title,
+                      Artist = song.Artist,
+                      Genre = song.Genre,
+                      Description = song.Description,
+                      Id = song.Id,
+                      Like = song.Like,
+                      UserId = song.UserId,
+                      User = song.User,
+                      SongUrl = song.SongUrl,
+                      CoverImageUrl = song.CoverImageUrl,
+                      SongLike = song.SongLike,
+                      CreatedOn = song.CreatedOn,
+                      SongDisLike = song.SongDisLike,
+                      SongView = song.SongView,
+                      Subscriber = song.Subscriber,
+                      FromCreation = song.FromCreation
+                  }).OrderByDescending(song => song.SongView).ToListAsync();
         }
 
         public async Task<List<SongModel>> GetSongByUser(string userId)
@@ -67,6 +94,7 @@ namespace EarTube.Repository
                       SongDisLike = song.SongDisLike,
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
+                      CreatedOn = song.CreatedOn,
                       FromCreation = song.FromCreation
                   }).ToListAsync();
         }
@@ -79,7 +107,6 @@ namespace EarTube.Repository
                 Artist = model.Artist,
                 Genre = model.Genre,
                 CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow,
                 Description = model.Description,
                 Id = model.Id,
                 Like = model.Like,

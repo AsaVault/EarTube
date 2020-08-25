@@ -227,8 +227,9 @@ namespace EarTube.Controllers
             TempData["DislikeAlert"] = false;
             TempData["AlreadyDislikeAlert"] = false;
 
+            var hotSong = await _songRepository.HotSongs();
             //data.UserId = userId;
-
+            ViewBag.IsHotSong = hotSong;
             return View(data);
         }
 
