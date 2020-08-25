@@ -4,6 +4,7 @@ using EarTube.Areas.Identity.Data;
 using EarTube.Data;
 using EarTube.Helpers;
 using EarTube.Models;
+using EarTube.Repository;
 using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,10 @@ namespace EarTube.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IComment _comment;
+        private readonly CommentRepository _comment;
 
 
-        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, IComment comment)
+        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, CommentRepository comment)
         {
             _db = db;
             _userManager = userManager;
@@ -103,7 +104,7 @@ namespace EarTube.Controllers
         //Youtube Like song
         [Route("like-comment/{id}", Name = "likeComment")]
 
-        public IActionResult LikeComment(int? id)
+        public async Task<IActionResult> LikeComment(int? id)
         {
             if (id == null)
             {
@@ -112,7 +113,7 @@ namespace EarTube.Controllers
 
             var data = _comment.CommentById(id);
             var userId = _userManager.GetUserId(this.HttpContext.User);
-            bool likeComment = _comment.CommentLike(data, userId);
+            bool likeComment = await _comment.CommentLike(data, userId);
             //data.SongLike += 1;
             if (likeComment)
             {
@@ -130,16 +131,16 @@ namespace EarTube.Controllers
         //Youtube Like song
         [Route("dislike-comment/{id}", Name = "dislikeComment")]
 
-        public IActionResult DisikeComment(int? id)
+        public async Task<IActionResult> DisikeComment(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var data = _comment.CommentById(id);
+            var data =  _comment.CommentById(id);
             var userId = _userManager.GetUserId(this.HttpContext.User);
-            bool dislikeComment = _comment.CommentDislike(data, userId);
+            bool dislikeComment = await _comment.CommentDislike(data, userId);
             //data.SongLike += 1;
             if (dislikeComment)
             {

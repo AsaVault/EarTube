@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EarTube.Repository
 {
 
-    public class CommentRepository : IComment
+    public class CommentRepository 
     {
         private readonly ApplicationDbContext _db;
         public CommentRepository(ApplicationDbContext db)
@@ -18,60 +18,60 @@ namespace EarTube.Repository
             _db = db;
         }
 
-        public void AddNewComment(Comment comment)
+        public async void AddNewComment(Comment comment)
         {
-            _db.Comment.Add(comment);
+           await _db.Comment.AddAsync(comment);
         }
 
-        public Comment CommentById(int? id)
+        public  Comment CommentById(int? id)
         {
-            return _db.Comment.FirstOrDefault(x => x.Id == id);
+            return  _db.Comment.FirstOrDefault(x => x.Id == id);
         }
 
-        public  bool CommentDislike(Comment model, string userId)
+        public async Task<bool> CommentDislike(Comment model, string userId)
         {
             var dislikeComment = false;
-            var userCommentDislike =  _db.UserCommentDislike.Any(u => u.UserId == userId && u.CommentId == model.Id);
+            var userCommentDislike =  await _db.UserCommentDislike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
             if (!userCommentDislike)
             {
-                var newComment =  _db.Comment.FirstOrDefault(x => x.Id == model.Id);
-                var userCommentLike =  _db.UserCommentLike.Any(u => u.UserId == userId && u.CommentId == model.Id);
+                var newComment = await _db.Comment.FirstOrDefaultAsync(x => x.Id == model.Id);
+                var userCommentLike = await _db.UserCommentLike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
                 if (!userCommentLike)
                 {
                     newComment.CommentDisikes += 1;
                 }
                 else
                 {
-                    var likeData =  _db.UserCommentLike.FirstOrDefault(u => u.UserId == userId && u.CommentId == model.Id);
+                    var likeData = await _db.UserCommentLike.FirstOrDefaultAsync(u => u.UserId == userId && u.CommentId == model.Id);
                     _db.UserCommentLike.Remove(likeData);
                     newComment.CommentLikes -= 1;
                     newComment.CommentDisikes += 1;
                 }
 
                 _db.Comment.Update(newComment);
-                _db.UserCommentDislike.Add(new UserCommentDislike { UserId = userId, CommentId = model.Id });
-                 _db.SaveChangesAsync();
+               await _db.UserCommentDislike.AddAsync(new UserCommentDislike { UserId = userId, CommentId = model.Id });
+                await  _db.SaveChangesAsync();
 
                 dislikeComment = true;
             }
             return dislikeComment;
         }
 
-        public  bool CommentLike(Comment model, string userId)
+        public  async Task<bool> CommentLike(Comment model, string userId)
         {
             var likeComment = false;
-            var userCommentLike =  _db.UserCommentLike.Any(u => u.UserId == userId && u.CommentId == model.Id);
+            var userCommentLike = await _db.UserCommentLike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
             if (!userCommentLike)
             {
-                var newComment =  _db.Comment.Where(x => x.Id == model.Id).FirstOrDefault();
-                var userCommentDislike =  _db.UserCommentDislike.Any(u => u.UserId == userId && u.CommentId == model.Id);
+                var newComment = await _db.Comment.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                var userCommentDislike = await _db.UserCommentDislike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
                 if (!userCommentDislike)
                 {
                     newComment.CommentLikes += 1;
                 }
                 else
                 {
-                    var dislikeData =  _db.UserCommentDislike.FirstOrDefault(u => u.UserId == userId && u.CommentId == model.Id);
+                    var dislikeData = await _db.UserCommentDislike.FirstOrDefaultAsync(u => u.UserId == userId && u.CommentId == model.Id);
                     _db.UserCommentDislike.Remove(dislikeData);
                     newComment.CommentDisikes -= 1;
                     newComment.CommentLikes += 1;
@@ -79,7 +79,7 @@ namespace EarTube.Repository
 
                 _db.Comment.Update(newComment);
                 _db.UserCommentLike.Add(new UserCommentLike { UserId = userId, CommentId = model.Id });
-                 _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 likeComment = true;
             }

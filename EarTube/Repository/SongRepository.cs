@@ -44,7 +44,7 @@ namespace EarTube.Repository
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
                       FromCreation = song.FromCreation
-                  }).ToListAsync();
+                  }).OrderByDescending(song=>song.Id).ToListAsync();
         }
 
         public async Task<List<SongModel>> GetSongByUser(string userId)
@@ -284,7 +284,7 @@ namespace EarTube.Repository
             _db.Song.Update(fromDb);
             await _db.SaveChangesAsync();
 
-            return await _db.Song.Where(x => x.Id == id).Include(c => c.Comment)
+             var result = await _db.Song.Where(x => x.Id == id).Include(c => c.Comment)
                  .Select(song => new SongModel()
                  {
                      Title = song.Title,
@@ -309,8 +309,9 @@ namespace EarTube.Repository
                          User = g.User,
                          CommentDisikes = g.CommentDisikes,
                          CommentLikes = g.CommentLikes
-                     }).ToList()
+                     }).OrderByDescending(c=>c.Id).ToList()
                  }).FirstOrDefaultAsync();
+            return result;
         }
 
 

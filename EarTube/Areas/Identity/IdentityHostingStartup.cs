@@ -22,7 +22,7 @@ namespace EarTube.Areas.Identity
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("DbContextConnection")));
-                services.AddTransient<IComment, CommentRepository>();
+                services.AddScoped<CommentRepository, CommentRepository>();
                 services.AddDefaultIdentity<ApplicationUser>(options => {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireLowercase = false;

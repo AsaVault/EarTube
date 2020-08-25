@@ -216,7 +216,6 @@ namespace EarTube.Controllers
             //isSuccess = false;
             
             var data = await _songRepository.GetSongById(id);
-            
             ViewBag.IsSuccess = TempData["Alert"];
             ViewBag.LikeSuccess = TempData["LikeAlert"];
             ViewBag.IsLikeSuccess = TempData["AlreadyLikeAlert"];
