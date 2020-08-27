@@ -71,7 +71,7 @@ namespace EarTube.Repository
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
                       FromCreation = song.FromCreation
-                  }).OrderByDescending(song => song.SongView).ToListAsync();
+                  }).OrderByDescending(song => song.SongView).Take(10).ToListAsync();
         }
 
         public async Task<List<SongModel>> GetSongByUser(string userId)

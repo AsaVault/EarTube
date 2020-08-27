@@ -28,15 +28,5 @@
     
 }
 
-@* Items *@
 
-    @*<div class="card mb-4 shadow-sm">
-        <a asp-route="songDetails" asp-route-id="@Model.Id">
-            <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg" : Model.CoverImageUrl)" class="img-thumbnail" style="width:340px; height:145px; " />
-        </a>
-        <div class="card-body">
-            <p class="card-title text-uppercase"><strong>@(string.IsNullOrEmpty(Model.Title) ? "Name is not available" : Model.Title)</strong></p>
-            <p class="card-text text-muted">Uploaded by: @(Model?.User?.FirstName + " " + Model?.User?.LastName) </p>
-        </div>
-    </div>*@
 
