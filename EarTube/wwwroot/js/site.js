@@ -59,8 +59,28 @@ $(function () {
 
 
 function AjaxSuccess() {
-            location.reload();
+
+    var button = $(".subscribeButton");
+    if (button.hasClass("btn-danger")) {
+        button.removeClass("btn-danger");
+        button.addClass("btn-secondary");
+        button.text("Unsubscribe");
+    } else {
+
+        button.removeClass("btn-secondary");
+        button.addClass("btn-danger");
+        button.text("Subscribe");
     }
+    
+
+    location.reload();
+
+    
+};
+
+function AjaxComplete() {
+    
+}
 
 
 //Show more less scripts
@@ -114,6 +134,22 @@ $(document).ready(function () {
             $(this).html(lesstext);
         }
         $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+    });
+
+    $(".subscribeButto").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+            $(this).text("Unsubscribe");
+        } else {
+
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+            $(this).text("Subscribe");
+        }
+        $(this).prev().toggle();
         $(this).prev().toggle();
         return false;
     });

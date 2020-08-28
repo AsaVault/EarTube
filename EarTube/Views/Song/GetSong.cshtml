@@ -135,10 +135,14 @@
                         </div>
                         <div class="col-md-9">
                             <span class="d-block text-capitalize">@(Model?.User?.FirstName + " " + Model?.User?.LastName)</span>
-                            <span class="d-block text-capitalize">@((Model?.Subscriber <= 0) ? "No Subscriber" : Model.Subscriber.ToString() + "Subscribers") </span>
+                            <span class="d-block text-capitalize" >@((Model?.Subscriber <= 0) ? "No Subscriber" : Model.Subscriber.ToString() + " Subscribers") </span>
                         </div>
                         <div class="col-md-1">
-                            <a class="btn btn-danger">Subscribe</a>
+                            <a 
+                               id="subscribeButton"
+                               asp-route="subscribe" asp-route-id="@Model.Id"
+                               data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+                               class="btn btn-danger subscribeButton">Subscribe</a>
                         </div>
                     </div>
                     <div class="row col-md-10 offset-1">

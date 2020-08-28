@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EarTube.Data
 {
-    public class UserUnsubscriber
+    public class AccountUnsubscriber
     {
         public int Id { get; set; }
         public string AccountUserId { get; set; }

@@ -437,6 +437,7 @@ namespace EarTube.Controllers
             return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
 
+        [Route("subscribe-account/{id}", Name = "subscribe")]
         public async Task<IActionResult> SubscribeGet(int? id)
         {
             if (id == null)

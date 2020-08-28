@@ -333,46 +333,45 @@ namespace EarTube.Repository
         public async Task<bool> SubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail)
         {
             var subscribe = false;
-            var userSubscribe = await _db.UserSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+            var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
             if (!userSubscribe)
             {
                 var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                var userUnsubscribe = await _db.UserUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                var userUnsubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
                 if (!userUnsubscribe)
                 {
                     newSong.Subscriber += 1;
                 }
                 else
                 {
-                    var unsubscribe = await _db.UserUnsubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
-                    _db.UserUnsubscriber.Remove(unsubscribe);
+                    newSong.Subscriber += 1;
+                    var unsubscribe = await _db.AccountUnsubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                    _db.AccountUnsubscriber.Remove(unsubscribe);
+                    
                 }
 
                 _db.Song.Update(newSong);
-                _db.UserSubscriber.Add(new UserSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail});
+                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail});
                 await _db.SaveChangesAsync();
                 subscribe = true;
             }
             else
             {
                 var unsubscribe = false;
-                var userUnSubscribe = await _db.UserUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                var userUnSubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
                 if (!userUnSubscribe)
                 {
                     var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                    var userSubscribed = await _db.UserSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
-                    if (!userSubscribed)
+                    var userSubscribed = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+                    if (userSubscribed)
                     {
                         newSong.Subscriber -= 1;
+                        var subscribed = await _db.AccountSubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+                        _db.AccountSubscriber.Remove(subscribed);
                     }
-                    else
-                    {
-                        var subscribed = await _db.UserSubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
-                        _db.UserSubscriber.Remove(subscribed);
-                    }
-
+                    
                     _db.Song.Update(newSong);
-                    _db.UserUnsubscriber.Add(new UserUnsubscriber { AccountUserId = accountUserId, UnSubscribeUserId = userId, UnSubscribeUserEmail = userEmail });
+                    _db.AccountUnsubscriber.Add(new AccountUnsubscriber { AccountUserId = accountUserId, UnSubscribeUserId = userId, UnSubscribeUserEmail = userEmail });
                     await _db.SaveChangesAsync();
                     unsubscribe = true;
                 }
