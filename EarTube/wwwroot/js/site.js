@@ -68,7 +68,7 @@ function AjaxSuccess() {
 $(document).ready(function () {
     // Configure/customize these variables.
     var showChar = 133;  // How many characters are shown by default
-    var showCharTitle = 25;  // How many characters are shown by default
+    var showCharTitle = 44;  // How many characters are shown by default
     var ellipsestext = "...";
     var moretext = "Read more";
     var lesstext = "Show less";
