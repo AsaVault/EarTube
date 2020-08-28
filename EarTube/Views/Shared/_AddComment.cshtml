@@ -14,7 +14,7 @@
     {
     <div class="row mb-4 col-md-12" id="commentSection">
         <div class="col-md-1 p-0 align-items-center">
-            <img src="@(string.IsNullOrEmpty(comment?.User?.UserImageUrl) ? "/images/Avatar.png" : comment.User.UserImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid border-0" />
+            <img src="@(string.IsNullOrEmpty(comment?.User?.UserImageUrl) ? "/images/Avatar.png" : comment.User.UserImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid " />
         </div>
         <div class="col-md-11 p-1">
             <h6 class="text-primary text-capitalize">@(comment?.User?.FirstName  + " " + comment?.User?.LastName)</h6>

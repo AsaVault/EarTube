@@ -23,6 +23,8 @@ namespace EarTube.Data
         public DbSet<UserSongDislike> UserSongDislike { get; set; }
         public DbSet<UserCommentDislike> UserCommentDislike { get; set; }
         public DbSet<UserCommentLike> UserCommentLike { get; set; }
+        public DbSet<UserSubscriber> UserSubscriber { get; set; }
+        public DbSet<UserUnsubscriber> UserUnsubscriber { get; set; }
         public DbSet<News> News { get; set; }
         //public DbSet<Likes> Likes { get; set; }
 

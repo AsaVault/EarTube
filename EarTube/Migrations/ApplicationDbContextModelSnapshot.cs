@@ -165,6 +165,27 @@ namespace EarTube.Migrations
                     b.ToTable("UserSongLike");
                 });
 
+            modelBuilder.Entity("EarTube.Data.UserSubscriber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SubscribeUserEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscribeUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UploadUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserSubscriber");
+                });
+
             modelBuilder.Entity("EarTube.Models.Comment", b =>
                 {
                     b.Property<int>("Id")

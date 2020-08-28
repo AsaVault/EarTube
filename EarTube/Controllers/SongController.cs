@@ -11,6 +11,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EarTube.Controllers
@@ -21,14 +22,16 @@ namespace EarTube.Controllers
         private readonly SongRepository _songRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SongController(SongRepository songRepository,
             IWebHostEnvironment webHostEnvironment,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _songRepository = songRepository;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ViewResult> GetAllSongs(bool isSuccess, int? songId)
@@ -318,6 +321,7 @@ namespace EarTube.Controllers
             }
 
             var data = await _songRepository.GetSongById(id);
+            
             var userId = _userManager.GetUserId(this.HttpContext.User);
             bool youtubeLikeSong = await _songRepository.YoutubeLikeSong(data, userId);
             //data.SongLike += 1;
@@ -432,6 +436,35 @@ namespace EarTube.Controllers
             TempData["AlreadyDislikeAlert"] = true;
             return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
+
+        public async Task<IActionResult> SubscribeGet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //var userTest = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var data = await _songRepository.GetSongById(id);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var accountUserId = data.UserId;
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            var userEmail = user.Email;
+            bool subscribe = await _songRepository.SubscribeRepo(data, accountUserId, userId, userEmail);
+            //data.SongLike += 1;
+            if (subscribe)
+            {
+                TempData["LikeAlert"] = true;
+                TempData["AlreadyLikeAlert"] = false;
+                return RedirectToAction(nameof(GetSong), new { id = data.Id });
+            }
+
+            TempData["LikeAlert"] = false;
+            TempData["AlreadyLikeAlert"] = true;
+            return RedirectToAction(nameof(GetSong), new { id = data.Id });
+        }
+
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {
