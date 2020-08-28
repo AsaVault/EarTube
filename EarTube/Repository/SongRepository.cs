@@ -48,10 +48,8 @@ namespace EarTube.Repository
                   }).OrderByDescending(song=>song.Id).ToListAsync();
         }
 
-
         public async Task<List<SongModel>> HotSongs()
         {
-
             return await _db.Song.Include(a => a.User)
                   .Select(song => new SongModel()
                   {
@@ -71,7 +69,7 @@ namespace EarTube.Repository
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
                       FromCreation = song.FromCreation
-                  }).OrderByDescending(song => song.SongView).Take(10).ToListAsync();
+                  }).OrderByDescending(song => song.Id).ToListAsync();
         }
 
         public async Task<List<SongModel>> GetSongByUser(string userId)
@@ -152,22 +150,10 @@ namespace EarTube.Repository
                 CoverImageUrl = model.CoverImageUrl
             };
 
-            //newSong.Comment = new List<Comment>();
-
-            //foreach (var comment in model.Comment)
-            //{
-            //    newSong.Comment.Add(new Comment()
-            //    {
-            //        Title = comment.Title,
-            //        Description = comment.Description
-            //    });
-            //}
-
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
 
             return newSong.Id;
-
         }
 
         public async Task<int> DeleteSong(SongModel model)
@@ -311,7 +297,7 @@ namespace EarTube.Repository
             _db.Song.Update(fromDb);
             await _db.SaveChangesAsync();
 
-             var result = await _db.Song.Where(x => x.Id == id).Include(c => c.Comment)
+             var result = await _db.Song.Where(x => x.Id == id).Include(u => u.User).Include(c=>c.Comment)
                  .Select(song => new SongModel()
                  {
                      Title = song.Title,
@@ -324,6 +310,7 @@ namespace EarTube.Repository
                      SongUrl = song.SongUrl,
                      SongDisLike = song.SongDisLike,
                      UserId = song.UserId,
+                     User = song.User,
                      SongView = song.SongView,
                      Subscriber = song.Subscriber,
                      FromCreation = song.FromCreation,

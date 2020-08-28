@@ -4,16 +4,21 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<div class="col-md-12">
-    @foreach (var comment in Model.Comment)
+<div id="commentSection">
+    
+        <div class="row mb-4 col-md-12 ">
+            <span class="d-block">@(string.IsNullOrEmpty(Model.Comment.Count().ToString())? "No Comments" : Model.Comment.Count().ToString() + " Comments")</span>
+        </div>
+
+@foreach (var comment in Model.Comment)
     {
-    <div class="mb-4 row col-md-12" id="commentSection">
-        <div class="col-md-1 p-1 align-items-center">
+    <div class="row mb-4 col-md-12" id="commentSection">
+        <div class="col-md-1 p-0 align-items-center">
             <img src="@(string.IsNullOrEmpty(comment?.User?.UserImageUrl) ? "/images/Avatar.png" : comment.User.UserImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid border-0" />
         </div>
         <div class="col-md-11 p-1">
             <h6 class="text-primary text-capitalize">@(comment?.User?.FirstName  + " " + comment?.User?.LastName)</h6>
-            <p class="pl-2 pb-1 m-0">@comment.Description</p>
+            <p class="pl-2 pb-1 m-0 more">@comment.Description</p>
             <span id="buttons" class="p-1">
                 <span class="text-muted">
                     <a asp-route="likeComment" asp-route-id="@comment.Id"

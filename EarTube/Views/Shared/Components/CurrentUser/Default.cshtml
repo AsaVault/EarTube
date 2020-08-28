@@ -1,0 +1,3 @@
+﻿@model EarTube.Areas.Identity.Data.ApplicationUser
+
+<img src="@(string.IsNullOrEmpty(Model?.UserImageUrl) ? "/images/Avatar.png" : Model.UserImageUrl)" style="border-radius:50%; width: 36px; height: 36px;" class="img-fluid border-0" />

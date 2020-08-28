@@ -2,6 +2,7 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 
+
 /* Change input control border color */
 .form-control, .input-group-text {
     border: 1px solid #0080ff;
@@ -123,4 +124,23 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+/*For Show more less*/
+
+.morecontent span {
+    display: none;
+}
+
+.morelink {
+    display: block;
+    text-decoration: none;
+    color: #606060;
+    padding-top: 5px;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #606060;
 }

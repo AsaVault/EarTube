@@ -128,31 +128,43 @@
                 <hr />
                 <div class="border-top"></div>
 
-                <div class="row p-4 col-md-12">
-                    <div class="col-md-1">
-                        <img src="@(string.IsNullOrEmpty(Model?.User?.UserImageUrl) ? "/images/Avatar.png" : Model.User.UserImageUrl)" class="img-fluid" style="border-radius:40%; width: 40px; height: 50px;" />
+                <div class="row ">
+                    <div class="row p-4 col-md-12 d-flex  align-items-center">
+                        <div class="col-md-1 ml-1">
+                            <img src="@(string.IsNullOrEmpty(Model?.User?.UserImageUrl) ? "/images/Avatar.png" : Model.User.UserImageUrl)" class="img-fluid" style="border-radius:50%; width: 36px; height: 36px;" />
+                        </div>
+                        <div class="col-md-9">
+                            <span class="d-block text-capitalize">@(Model?.User?.FirstName + " " + Model?.User?.LastName)</span>
+                            <span class="d-block text-capitalize">@((Model?.Subscriber <= 0) ? "No Subscriber" : Model.Subscriber.ToString() + "Subscribers") </span>
+                        </div>
+                        <div class="col-md-1">
+                            <a class="btn btn-danger">Subscribe</a>
+                        </div>
                     </div>
-                    <div class="col-md-8">
-                        <p>@Model.Description</p>
-                    </div>
-                    <div class="col-md-2 offset-1">
-                        <a class="btn btn-danger">Subscribe</a>
+                    <div class="row col-md-10 offset-1">
+                        <p class="more">@Model.Description</p>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
-                <div class="row p-4 col-md-12">
-                    <div class="d-flex justify-content-between align-items-center my-3">
-                        <div class="btn-group">
-                            @*<a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"*@
-                            <a onclick="showInPopup('@Url.Action("AddComment","Comment",new {songId=Model.Id},Context.Request.Scheme)','Add Comment')"
-                               class="btn btn-sm btn-outline-secondary">Click to Comment <i class="fas fa-comment"></i></a>
-                        </div>
-
+                <div class="row  col-md-12 d-flex  align-items-center">
+                    <div class="col-md-1">
+                        @* Login User *@
+                        @await Component.InvokeAsync("CurrentUser")
                     </div>
+                    <div class="col-md-10">
+                        <div class="my-3">
+                            <div class="btn-group">
+                                @*<a asp-controller="Comment" asp-action="AddComment" asp-route-songId="@Model.Id"*@
+                                <a onclick="showInPopup('@Url.Action("AddComment","Comment",new {songId=Model.Id},Context.Request.Scheme)','Add Comment')"
+                                   class="btn btn-sm btn-outline-secondary">Click to Comment <i class="fas fa-comment"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="border-top mb-4"></div>
-                <div class="row my-1">
+                <div class="pl-3">
                     @await Html.PartialAsync("_AddComment", Model)
                 </div>
             </div>
