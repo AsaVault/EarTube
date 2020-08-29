@@ -72,16 +72,17 @@
                         <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/unsplash.jpg": Model.CoverImageUrl)" class="img-thumbnail" style="width: 740px; height: 420px; left: 0px; top: 0px;" />
                         <h5 class="text-capitalize my-2 pl-4"><span>@Model.Title</span></h5>
                         <div class="row col-12 mt-3">
-                            <div class="col-md-2 py-2 h6 ">
-                                <span class=" text-muted">@Model.SongView.ToString()  Views.</span>
+                            <div class="col-md-3 py-2 small pl-2 ">
+                                <span class=" text-muted">@Model?.SongView.ToString() Views . </span>
+                                <span class=" text-muted">@((Model.CreatedOn.HasValue)? Model.CreatedOn.Value.ToShortDateString().ToString(): "No Date" ) </span>
                             </div>
                             <div class="col-md-2 ">
-                                <a class="btn btn-outline-primary p-2@((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": " d-none")" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
+                                <a class="btn btn-outline-primary p-2@((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": " d-none") small" href="@Model.SongUrl" target="_blank" download="EarTube-@Model.Id">
                                     Download
                                 </a>
                             </div>
 
-                            <div class="col-md-8 p-0 py-1">
+                            <div class="col-md-7 p-0 py-1">
 
                                 @if (UserManager.GetUserId(User).ToString() == Model.UserId)
                                 {
@@ -98,24 +99,24 @@
                                 }
 
                                 <span id="buttons">
-                                    <span class="text-muted p-1">
+                                    <span class="text-muted">
                                         <a asp-route="youtubeLikeSong" asp-route-id="@Model.Id"
                                            data-ajax="true" data-ajax-success="AjaxSuccess"
                                            class="pl-1"><i class="fas fa-thumbs-up fa-6"><span class="px-2  ">@Model.SongLike.ToString()</span></i></a>
                                     </span>
 
-                                    <span class="text-muted p-1 ">
+                                    <span class="text-muted">
                                         <a asp-route="youtubeDislikeSong" asp-route-id="@Model.Id"
                                            data-ajax="true" data-ajax-success="AjaxSuccess"
                                            class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down fa-6"><span class="px-2">@Model.SongDisLike.ToString()</span></i></a>
                                     </span>
 
-                                    <span class="text-muted p-1">
+                                    <span class="text-muted">
                                         <a asp-route="shareSong" asp-route-id="@Model.Id"
                                            class="px-1"><i class="fas fa-share fa-6"></i></a>
                                     </span>
                                 </span>
-                                <span id="info" class="offset-1">
+                                <span id="info" class="">
                                     <small class="text-light bg-primary p-1">@(string.IsNullOrEmpty(Model.Genre) ? "Genre: NA" : Model.Genre)</small>
                                     <small class="text-light bg-primary p-1 ml-1">@(string.IsNullOrEmpty(Model.Artist) ? "NA" : Model.Artist)</small>
                                 </span>
