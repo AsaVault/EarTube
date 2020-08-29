@@ -76,6 +76,7 @@ namespace EarTube.Areas.Identity.Pages.Account
             [Display(Name = "Cover Image")]
             public IFormFile CoverPhoto { get; set; }
             public string UserImageUrl { get; set; }
+            public int Subscriber { get; set; }
             [Required(ErrorMessage = "Confirm password")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
@@ -100,7 +101,7 @@ namespace EarTube.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName , CoverPhoto = Input.CoverPhoto, UserImageUrl=Input.UserImageUrl};
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName , CoverPhoto = Input.CoverPhoto, UserImageUrl=Input.UserImageUrl, Subscriber = Input.Subscriber};
                 if (user.CoverPhoto != null)
                 {
                     string folder = "users/cover/";

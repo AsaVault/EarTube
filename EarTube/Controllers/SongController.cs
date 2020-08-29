@@ -219,6 +219,7 @@ namespace EarTube.Controllers
             //isSuccess = false;
             
             var data = await _songRepository.GetSongById(id);
+            ViewBag.IsSubscribe = await CheckSubscribe(id); 
             ViewBag.IsSuccess = TempData["Alert"];
             ViewBag.LikeSuccess = TempData["LikeAlert"];
             ViewBag.IsLikeSuccess = TempData["AlreadyLikeAlert"];
@@ -230,9 +231,6 @@ namespace EarTube.Controllers
             TempData["DislikeAlert"] = false;
             TempData["AlreadyDislikeAlert"] = false;
 
-            var hotSong = await _songRepository.HotSongs();
-            //data.UserId = userId;
-            ViewBag.IsHotSong = hotSong;
             return View(data);
         }
 
@@ -267,14 +265,10 @@ namespace EarTube.Controllers
                     songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
                 }
 
-
-
                 if (songModel.SongFile != null)
                 {
-
                     string folder = "songs/songfiles/";
                     songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
-
                 }
 
                 int id = await _songRepository.EditSong(songModel);
@@ -305,7 +299,6 @@ namespace EarTube.Controllers
             {
                 return RedirectToAction(nameof(GetAllSongs), new { isSuccess = true });
             }
-
 
             return NotFound();
         }
@@ -444,28 +437,37 @@ namespace EarTube.Controllers
             {
                 return NotFound();
             }
-            //var userTest = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+            //var data = await _songRepository.GetSongById(id);
+            //var subscribe = await CheckSubscribe(id);
+            //data.SongLike += 1;
             var data = await _songRepository.GetSongById(id);
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var accountUserId = data.UserId;
             var userId = _userManager.GetUserId(this.HttpContext.User);
             var userEmail = user.Email;
+
             bool subscribe = await _songRepository.SubscribeRepo(data, accountUserId, userId, userEmail);
-            //data.SongLike += 1;
             if (subscribe)
             {
-                TempData["LikeAlert"] = true;
-                TempData["AlreadyLikeAlert"] = false;
                 return RedirectToAction(nameof(GetSong), new { id = data.Id });
             }
-
-            TempData["LikeAlert"] = false;
-            TempData["AlreadyLikeAlert"] = true;
             return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
 
+
+        //Check Subscribe
+        public async Task<bool> CheckSubscribe(int? id)
+        {
+                var data = await _songRepository.GetSongById(id);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                var accountUserId = data.UserId;
+                var userId = _userManager.GetUserId(this.HttpContext.User);
+                var userEmail = user.Email;
+
+                bool subscribe = await _songRepository.SubscribeStatus(data, accountUserId, userId, userEmail);
+
+            return subscribe;
+        }
 
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {

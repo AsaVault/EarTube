@@ -135,14 +135,20 @@
                         </div>
                         <div class="col-md-9">
                             <span class="d-block text-capitalize">@(Model?.User?.FirstName + " " + Model?.User?.LastName)</span>
-                            <span class="d-block text-capitalize" >@((Model?.Subscriber <= 0) ? "No Subscriber" : Model.Subscriber.ToString() + " Subscribers") </span>
+                            <span class="d-block text-capitalize">@((Model?.User.Subscriber <= 0) ? "No Subscriber" : Model.User.Subscriber.ToString() + " Subscribers") </span>
                         </div>
                         <div class="col-md-1">
-                            <a 
-                               id="subscribeButton"
+                            @*<a
+                                id="subscribeButton"
+                                asp-route="subscribe" asp-route-id="@Model.Id"
+                                data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+                                class="btn btn-danger subscribeButton">Subscribe</a>*@
+
+                            <a id="subscribeButton"
                                asp-route="subscribe" asp-route-id="@Model.Id"
                                data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
-                               class="btn btn-danger subscribeButton">Subscribe</a>
+                               class="btn @((ViewBag.IsSubscribe)? "btn-secondary": "btn-danger") subscribeButton">
+                            @((ViewBag.IsSubscribe)? "Unsubscribe": "Subscribe")</a>
                         </div>
                     </div>
                     <div class="row col-md-10 offset-1">
@@ -165,7 +171,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="border-top mb-4"></div>
                 <div class="pl-3">
@@ -174,25 +180,25 @@
             </div>
 
             <div class="col-md-4">
-                @await Component.InvokeAsync("MostViewSong") 
+                @await Component.InvokeAsync("MostViewSong")
             </div>
             @*<div class="col-md-4 ">
-                <div class="border-top"></div>
-                <p class="my-4">Most Viewed Songs</p>
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="~/images/unsplash.jpg " class="img-fluid" style="width:168px; height:94px;"/>
-                    </div>
-                    <div class="col-md-6">
-                        <p>Title</p>
-                        <p>UserName</p>
-                        <div id="bottom">
-                            <span>Views</span>
-                            <span>Views</span>
+                    <div class="border-top"></div>
+                    <p class="my-4">Most Viewed Songs</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="~/images/unsplash.jpg " class="img-fluid" style="width:168px; height:94px;"/>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Title</p>
+                            <p>UserName</p>
+                            <div id="bottom">
+                                <span>Views</span>
+                                <span>Views</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>*@
+                </div>*@
 
 
             @*Buttons*@

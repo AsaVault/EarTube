@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace EarTube.Repository
 {
-    public class SongRepository 
+    public class SongRepository
     {
 
         private readonly ApplicationDbContext _db;
@@ -328,9 +328,77 @@ namespace EarTube.Repository
             return result;
         }
 
-        
-        //Subsribe Logic
+        //Check Subscribe status 
+        public async Task<bool> SubscribeStatus(SongModel model, string accountUserId, string userId, string userEmail)
+        {
+            var subscribe = false;
+            var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+            if (userSubscribe)
+            {
+                subscribe = true;
+            }
+            else
+            {
+                var userUnsubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                if (userUnsubscribe)
+                {
+                    subscribe = false;
+                }
+            }
+            return subscribe;
+        }
+
+        //new try 
         public async Task<bool> SubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail)
+        {
+            var subscribe = false;
+            var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+            if (!userSubscribe)
+            {
+                var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                var userUnsubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                if (!userUnsubscribe)
+                {
+                    newSong.User.Subscriber += 1;
+                }
+                else
+                {
+                    newSong.User.Subscriber += 1;
+                    var unsubscribe = await _db.AccountUnsubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                    _db.AccountUnsubscriber.Remove(unsubscribe);
+                }
+                _db.Song.Update(newSong);
+                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail });
+                await _db.SaveChangesAsync();
+                subscribe = true;
+            }
+            else
+            {
+                //subscribe = false;
+                // var unsubscribe = false;
+                var userUnSubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                if (!userUnSubscribe)
+                {
+                    var newSong = await _db.Song.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                    var userSubscribed = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+                    if (userSubscribed)
+                    {
+                        newSong.User.Subscriber -= 1;
+                        var subscribed = await _db.AccountSubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+                        _db.AccountSubscriber.Remove(subscribed);
+                    }
+                    _db.Song.Update(newSong);
+                    _db.AccountUnsubscriber.Add(new AccountUnsubscriber { AccountUserId = accountUserId, UnSubscribeUserId = userId, UnSubscribeUserEmail = userEmail });
+                    await _db.SaveChangesAsync();
+                    subscribe = false;
+                }
+                return subscribe;
+            }
+            return subscribe;
+        }
+
+        //OldSubsribe Logic
+        public async Task<bool> OldSubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail)
         {
             var subscribe = false;
             var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
@@ -347,11 +415,11 @@ namespace EarTube.Repository
                     newSong.Subscriber += 1;
                     var unsubscribe = await _db.AccountUnsubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
                     _db.AccountUnsubscriber.Remove(unsubscribe);
-                    
+
                 }
 
                 _db.Song.Update(newSong);
-                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail});
+                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail });
                 await _db.SaveChangesAsync();
                 subscribe = true;
             }
@@ -369,7 +437,7 @@ namespace EarTube.Repository
                         var subscribed = await _db.AccountSubscriber.FirstOrDefaultAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
                         _db.AccountSubscriber.Remove(subscribed);
                     }
-                    
+
                     _db.Song.Update(newSong);
                     _db.AccountUnsubscriber.Add(new AccountUnsubscriber { AccountUserId = accountUserId, UnSubscribeUserId = userId, UnSubscribeUserEmail = userEmail });
                     await _db.SaveChangesAsync();
@@ -380,7 +448,7 @@ namespace EarTube.Repository
             return subscribe;
         }
 
-       
+
         public List<SongModel> SearchBook(string title, string authorName)
         {
             return null;
