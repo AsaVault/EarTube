@@ -10,26 +10,63 @@
         if (song.SongView > 10)
         {
             <div class="row mb-5">
-                
-                    <div class="col-md-6">
-                        <img src="@(string.IsNullOrEmpty(song.CoverImageUrl)? "/images/unsplash.jpg": song.CoverImageUrl) " class="img-fluid" style="width:168px; height:94px;" />
-                    </div>
-                    <div class="col-md-6">
-                        <p>@song?.Title</p>
-                        <p>@(song?.User?.FirstName  + " " + song?.User?.LastName) </p>
-                        <div id="bottom">
-                            <span>@song?.SongView</span>
-                            @{
-                                var show = song.CreatedOn - DateTime.UtcNow;
-                                <span> @show.Value </span>
-                            }
 
-                        </div>
+                <div class="col-md-6">
+                    <img src="@(string.IsNullOrEmpty(song.CoverImageUrl)? "/images/unsplash.jpg": song.CoverImageUrl) " class="img-fluid" style="width:168px; height:94px;" />
+                </div>
+                <div class="col-md-6">
+                    <p>@song?.Title</p>
+                    <span>@(string.IsNullOrEmpty(song?.User?.FirstName + song?.User?.LastName)? "No username": (song?.User?.FirstName + " " + song?.User?.LastName)) </span>
+                    <div id="bottom" class="small">
+                        <span >@((song.SongView > 0) ? song.SongView.ToString() + " Views": "No View.")</span>
+
+                        @{
+                            var displayDateTime = "";
+                            if (song.CreatedOn.HasValue)
+                            {
+                                var time = DateTime.Now - song.CreatedOn.Value;
+
+
+
+                                if (time.TotalSeconds < 60)
+                                {
+                                    displayDateTime = Convert.ToInt32(time.TotalSeconds).ToString() + " Seconds ago";
+                                }
+                                else
+                                {
+                                    if (time.TotalMinutes < 60)
+                                    {
+                                        displayDateTime = Convert.ToInt32(time.TotalMinutes).ToString() + " Minutes ago";
+                                    }
+                                    else
+                                    {
+                                        if (time.TotalHours < 24)
+                                        {
+                                            displayDateTime = Convert.ToInt32(time.TotalHours).ToString() + " Hours ago";
+                                        }
+                                        else
+                                        {
+                                            if (time.TotalDays < 29)
+                                            {
+                                                displayDateTime = Convert.ToInt32(time.TotalDays).ToString() + " Days ago";
+                                            }
+                                            else
+                                            {
+                                                if (time.TotalDays > 28 && time.TotalDays < 32)
+                                                {
+                                                    displayDateTime = "1 Month ago";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            <span> @displayDateTime</span>
+                        }
                     </div>
                 </div>
-                
+            </div>
         }
-
     }
 
 </div>
