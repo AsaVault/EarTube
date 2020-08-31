@@ -25,27 +25,27 @@ namespace EarTube.Repository
 
         public async Task<List<SongModel>> GetAllSongs()
         {
-             var data  = await _db.Song.Include(a => a.User)
-                  .Select(song => new SongModel()
-                  {
-                      Title = song.Title,
-                      Artist = song.Artist,
-                      Genre = song.Genre,
-                      Description = song.Description,
-                      Id = song.Id,
-                      Like = song.Like,
-                      UserId = song.UserId,
-                      User = song.User,
-                      SongUrl = song.SongUrl,
-                      CoverImageUrl = song.CoverImageUrl,
-                      SongLike = song.SongLike,
-                      CreatedOn = song.CreatedOn,
-                      SongDisLike = song.SongDisLike,
-                      SongView = song.SongView,
-                      Subscriber = song.Subscriber,
-                      FromCreation = song.FromCreation
-                  }).OrderByDescending(song => song.Id).ToListAsync();
-            
+            var data = await _db.Song.Include(a => a.User)
+                 .Select(song => new SongModel()
+                 {
+                     Title = song.Title,
+                     Artist = song.Artist,
+                     Genre = song.Genre,
+                     Description = song.Description,
+                     Id = song.Id,
+                     Like = song.Like,
+                     UserId = song.UserId,
+                     User = song.User,
+                     SongUrl = song.SongUrl,
+                     CoverImageUrl = song.CoverImageUrl,
+                     SongLike = song.SongLike,
+                     CreatedOn = song.CreatedOn,
+                     SongDisLike = song.SongDisLike,
+                     SongView = song.SongView,
+                     Subscriber = song.Subscriber,
+                     FromCreation = song.FromCreation
+                 }).OrderByDescending(song => song.Id).ToListAsync();
+
             return data;
         }
 
@@ -138,46 +138,28 @@ namespace EarTube.Repository
 
         public async Task<int> EditSong(SongModel model)
         {
-            var newSong = new Song()
-            {
-                Title = model.Title,
-                Artist = model.Artist,
-                Genre = model.Genre,
-                UpdatedOn = DateTime.UtcNow,
-                Description = model.Description,
-                Id = model.Id,
-                Like = model.Like,
-                SongUrl = model.SongUrl,
-                CoverImageUrl = model.CoverImageUrl
-            };
-
+            var newSong = await _db.Song.FirstOrDefaultAsync(x => x.Id == model.Id);
+            newSong.Title = model.Title;
+            newSong.Artist = model.Artist;
+            newSong.Genre = model.Genre;
+            newSong.UpdatedOn = DateTime.UtcNow;
+            newSong.Description = model.Description;
+            newSong.SongUrl = model.SongUrl;
+            newSong.CoverImageUrl = model.CoverImageUrl;
+            
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
-
             return newSong.Id;
         }
 
         public async Task<int> DeleteSong(SongModel model)
         {
-            var newSong = new Song()
-            {
-                Title = model.Title,
-                Artist = model.Artist,
-                Genre = model.Genre,
-                UpdatedOn = DateTime.UtcNow,
-                CreatedOn = DateTime.UtcNow,
-                Description = model.Description,
-                Id = model.Id,
-                Like = model.Like,
-                SongUrl = model.SongUrl,
-                CoverImageUrl = model.CoverImageUrl
-            };
+            var newSong = await _db.Song.FirstOrDefaultAsync(x => x.Id == model.Id);
 
             _db.Song.Remove(newSong);
             await _db.SaveChangesAsync();
 
             return newSong.Id;
-
         }
 
         public async Task<bool> LikeSong(SongModel model, string userId)

@@ -68,7 +68,7 @@ namespace EarTube.Controllers
                 return RedirectToAction(nameof(GetAllSongs));
 
 
-             return View(datas);
+            return View(datas);
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }
 
@@ -109,7 +109,7 @@ namespace EarTube.Controllers
                 {
                     //return RedirectToAction(nameof(AddNewSong), new { isSuccess = true, songId = id });
                     TempData["Alert"] = true;
-                    return RedirectToAction(nameof(GetAllSongs), new { songId = id});
+                    return RedirectToAction(nameof(GetAllSongs), new { songId = id });
                 }
             }
 
@@ -117,9 +117,9 @@ namespace EarTube.Controllers
         }
 
         //AddOrEdit Action Method
-        public async Task<IActionResult> AddOrEdit( int? songId = 0, bool isSuccess = false)
+        public async Task<IActionResult> AddOrEdit(int? songId = 0, bool isSuccess = false)
         {
-            if(songId == 0)
+            if (songId == 0)
             {
                 var model = new SongModel();
                 return View(model);
@@ -146,9 +146,75 @@ namespace EarTube.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(SongModel songModel, bool isSuccess = false, int songId = 0)
         {
+            if (songModel.Id == 0)
+            {
+                var userId = _userManager.GetUserId(this.HttpContext.User);
+                songModel.UserId = userId;
+                if (ModelState.IsValid)
+                {
+                    if (songModel.CoverPhoto != null)
+                    {
+                        string folder = "songs/cover/";
+                        songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                    }
+
+                    if (songModel.SongFile != null)
+                    {
+                        string folder = "songs/songfiles/";
+                        songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                    }
+                    int id = await _songRepository.AddNewSong(songModel);
+                    if (id > 0)
+                    {
+                        TempData["Alert"] = true;
+                        TempData["SongID"] = id;
+                    }
+                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _songRepository.GetAllSongs()) });
+                }
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
+            }
+            else
+            {
+                var songFromDb = await _songRepository.GetSongById(songModel.Id);
+                if (songModel.CoverPhoto != null)
+                {
+                    string folder = "songs/cover/";
+                    songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                }
+                else
+                {
+                    songModel.CoverImageUrl = songFromDb.CoverImageUrl;
+                }
+
+                if (songModel.SongFile != null)
+                {
+                    string folder = "songs/songfiles/";
+                    songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                }
+                else
+                {
+                    songModel.SongUrl = songFromDb.SongUrl;
+                }
+                int result = await _songRepository.EditSong(songModel);
+                if(result > 0)
+                {
+                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "GetAllSongs", _songRepository.GetAllSongs()) });
+                }
+                
+            }
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
+        }
+
+
+        //Old Post AddOrEdit
+        //Post AddOrEdit/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OldAddOrEdit(SongModel songModel, bool isSuccess = false, int songId = 0)
+        {
             if (ModelState.IsValid)
             {
-                if(songId == 0)
+                if (songId == 0)
                 {
                     var userId = _userManager.GetUserId(this.HttpContext.User);
                     songModel.UserId = userId;
@@ -166,7 +232,7 @@ namespace EarTube.Controllers
                             songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
                         }
 
-                        
+
 
                         int id = await _songRepository.AddNewSong(songModel);
                         if (id > 0)
@@ -183,16 +249,25 @@ namespace EarTube.Controllers
                 }
                 else
                 {
+                    var songFromDb = await _songRepository.GetSongById(songModel.Id);
                     if (songModel.CoverPhoto != null)
                     {
                         string folder = "songs/cover/";
                         songModel.CoverImageUrl = await UploadImage(folder, songModel.CoverPhoto);
+                    }
+                    else
+                    {
+                        songModel.CoverImageUrl = songFromDb.CoverImageUrl;
                     }
 
                     if (songModel.SongFile != null)
                     {
                         string folder = "songs/songfiles/";
                         songModel.SongUrl = await UploadImage(folder, songModel.SongFile);
+                    }
+                    else
+                    {
+                        songModel.SongUrl = songFromDb.SongUrl;
                     }
 
                     await _songRepository.EditSong(songModel);
@@ -207,7 +282,7 @@ namespace EarTube.Controllers
             //return View(songModel);
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
         }
-        
+
 
         [Route("song-details/{id}", Name = "songDetails")]
         public async Task<ViewResult> GetSong(int id, bool isSuccess)
@@ -217,9 +292,9 @@ namespace EarTube.Controllers
             //ViewBag.comment = new Comment();
             //ViewBag.IsSuccess = TempData["Alert"];
             //isSuccess = false;
-            
+
             var data = await _songRepository.GetSongById(id);
-            ViewBag.IsSubscribe = await CheckSubscribe(id); 
+            ViewBag.IsSubscribe = await CheckSubscribe(id);
             ViewBag.IsSuccess = TempData["Alert"];
             ViewBag.LikeSuccess = TempData["LikeAlert"];
             ViewBag.IsLikeSuccess = TempData["AlreadyLikeAlert"];
@@ -314,7 +389,7 @@ namespace EarTube.Controllers
             }
 
             var data = await _songRepository.GetSongById(id);
-            
+
             var userId = _userManager.GetUserId(this.HttpContext.User);
             bool youtubeLikeSong = await _songRepository.YoutubeLikeSong(data, userId);
             //data.SongLike += 1;
@@ -458,13 +533,13 @@ namespace EarTube.Controllers
         //Check Subscribe
         public async Task<bool> CheckSubscribe(int? id)
         {
-                var data = await _songRepository.GetSongById(id);
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                var accountUserId = data.UserId;
-                var userId = _userManager.GetUserId(this.HttpContext.User);
-                var userEmail = user.Email;
+            var data = await _songRepository.GetSongById(id);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var accountUserId = data.UserId;
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            var userEmail = user.Email;
 
-                bool subscribe = await _songRepository.SubscribeStatus(data, accountUserId, userId, userEmail);
+            bool subscribe = await _songRepository.SubscribeStatus(data, accountUserId, userId, userEmail);
 
             return subscribe;
         }

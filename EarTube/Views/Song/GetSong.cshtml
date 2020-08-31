@@ -135,8 +135,8 @@
                             <img src="@(string.IsNullOrEmpty(Model?.User?.UserImageUrl) ? "/images/Avatar.png" : Model.User.UserImageUrl)" class="img-fluid" style="border-radius:50%; width: 36px; height: 36px;" />
                         </div>
                         <div class="col-md-9">
-                            <span class="d-block text-capitalize">@(Model?.User?.FirstName + " " + Model?.User?.LastName)</span>
-                            <span class="d-block text-capitalize">@((Model?.User.Subscriber <= 0) ? "No Subscriber" : Model.User.Subscriber.ToString() + " Subscribers") </span>
+                            <span class="d-block text-capitalize">@((Model.User != null) ? Model.User.FirstName + " " + Model.User.LastName : "No Account User")</span>
+                            <span class="d-block text-capitalize">@((Model.User != null && Model.User.Subscriber > 0) ? Model.User.Subscriber.ToString() + " Subscribers" : "No Subscriber"  ) </span>
                         </div>
                         <div class="col-md-1">
                             @*<a
