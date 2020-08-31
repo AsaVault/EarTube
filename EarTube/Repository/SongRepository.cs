@@ -73,6 +73,46 @@ namespace EarTube.Repository
                   }).OrderByDescending(song => song.Id).ToListAsync();
         }
 
+        //Still needed some touch
+        public async Task<SongModel> GetSongById(int? id)
+        {
+            var fromDb = await _db.Song.FirstOrDefaultAsync(x => x.Id == id);
+            fromDb.SongView += 1;
+            _db.Song.Update(fromDb);
+            await _db.SaveChangesAsync();
+
+            var result = await _db.Song.Where(x => x.Id == id).Include(u => u.User).Include(c => c.Comment)
+                .Select(song => new SongModel()
+                {
+                    Title = song.Title,
+                    Artist = song.Artist,
+                    Genre = song.Genre,
+                    Description = song.Description,
+                    Id = song.Id,
+                    Like = song.Like,
+                    SongLike = song.SongLike,
+                    SongUrl = song.SongUrl,
+                    SongDisLike = song.SongDisLike,
+                    UserId = song.UserId,
+                    User = song.User,
+                    SongView = song.SongView,
+                    Subscriber = song.Subscriber,
+                    CreatedOn = song.CreatedOn,
+                    FromCreation = song.FromCreation,
+                    CoverImageUrl = song.CoverImageUrl,
+                    Comment = song.Comment.Select(g => new CommentModel()
+                    {
+                        Id = g.Id,
+                        Title = g.Title,
+                        Description = g.Description,
+                        User = g.User,
+                        CommentDisikes = g.CommentDisikes,
+                        CommentLikes = g.CommentLikes
+                    }).OrderByDescending(c => c.Id).ToList()
+                }).FirstOrDefaultAsync();
+            return result;
+        }
+
         public async Task<List<SongModel>> GetSongByUser(string userId)
         {
 
@@ -272,44 +312,7 @@ namespace EarTube.Repository
             return dislikeSong;
         }
 
-        //Still needed some touch
-        public async Task<SongModel> GetSongById(int? id)
-        {
-            var fromDb = await _db.Song.FirstOrDefaultAsync(x => x.Id == id);
-            fromDb.SongView += 1;
-            _db.Song.Update(fromDb);
-            await _db.SaveChangesAsync();
-
-            var result = await _db.Song.Where(x => x.Id == id).Include(u => u.User).Include(c => c.Comment)
-                .Select(song => new SongModel()
-                {
-                    Title = song.Title,
-                    Artist = song.Artist,
-                    Genre = song.Genre,
-                    Description = song.Description,
-                    Id = song.Id,
-                    Like = song.Like,
-                    SongLike = song.SongLike,
-                    SongUrl = song.SongUrl,
-                    SongDisLike = song.SongDisLike,
-                    UserId = song.UserId,
-                    User = song.User,
-                    SongView = song.SongView,
-                    Subscriber = song.Subscriber,
-                    FromCreation = song.FromCreation,
-                    CoverImageUrl = song.CoverImageUrl,
-                    Comment = song.Comment.Select(g => new CommentModel()
-                    {
-                        Id = g.Id,
-                        Title = g.Title,
-                        Description = g.Description,
-                        User = g.User,
-                        CommentDisikes = g.CommentDisikes,
-                        CommentLikes = g.CommentLikes
-                    }).OrderByDescending(c => c.Id).ToList()
-                }).FirstOrDefaultAsync();
-            return result;
-        }
+      
 
         //Check Subscribe status 
         public async Task<bool> SubscribeStatus(SongModel model, string accountUserId, string userId, string userEmail)
