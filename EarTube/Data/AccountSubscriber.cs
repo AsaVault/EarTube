@@ -11,5 +11,7 @@ namespace EarTube.Data
         public string AccountUserId { get; set; }
         public string SubscribeUserId { get; set; }
         public string SubscribeUserEmail { get; set; }
+        public string SubscriberFirstName { get; set; }
+        public string SubscriberLastName { get; set; }
     }
 }

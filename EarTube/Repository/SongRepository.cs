@@ -356,7 +356,7 @@ namespace EarTube.Repository
 
 
         //new try 
-        public async Task<bool> SubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail)
+        public async Task<bool> SubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail, string userFirstName, string userLastName)
         {
             var subscribe = false;
             var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
@@ -375,7 +375,7 @@ namespace EarTube.Repository
                     _db.AccountUnsubscriber.Remove(unsubscribe);
                 }
                 _db.Song.Update(newSong);
-                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail });
+                _db.AccountSubscriber.Add(new AccountSubscriber { AccountUserId = accountUserId, SubscribeUserId = userId, SubscribeUserEmail = userEmail, SubscriberFirstName = userFirstName, SubscriberLastName = userLastName });
                 await _db.SaveChangesAsync();
                 subscribe = true;
             }

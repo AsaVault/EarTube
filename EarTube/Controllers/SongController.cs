@@ -138,14 +138,14 @@ namespace EarTube.Controllers
                     };
 
                     var subscribers = _songRepository.GetSubscriber(userId);
-                    foreach( var subscriber in subscribers)
+                    foreach (var subscriber in subscribers)
                     {
                         msg.To.Add(subscriber.SubscribeUserEmail); // receiver Email
 
                         msg.Subject = "EarTube - New Song Upload";
                         msg.Body = $"Hello {subscriber.SubscribeUserEmail}, {user.FirstName}-{user.LastName}  as added a new song. Go check it out";  // Message Body
                     }
-                    
+
 
                     SmtpClient client = new SmtpClient
                     {
@@ -236,28 +236,30 @@ namespace EarTube.Controllers
                     };
 
                     var subscribers = _songRepository.GetSubscriber(userId);
-                    foreach (var subscriber in subscribers)
+                    if (subscribers.Count() > 0)
                     {
-                        msg.To.Add(subscriber.SubscribeUserEmail); // receiver Email
+                        foreach (var subscriber in subscribers)
+                        {
+                            msg.To.Add(subscriber.SubscribeUserEmail); // receiver Email
 
-                        msg.Subject = "EarTube - New Song Upload";
-                        msg.Body = $"Hello {subscriber.SubscribeUserEmail}, {user.FirstName}-{user.LastName}  as added a new song. Go check it out";  // Message Body
+                            msg.Subject = "EarTube - New Song Upload";
+                            msg.Body = $"Hello {subscriber.SubscriberFirstName} {subscriber.SubscriberLastName}, {user.FirstName}-{user.LastName}  as added a new song. Go check it out";  // Message Body
+                        }
+                        SmtpClient client = new SmtpClient
+                        {
+                            Host = "smtp.gmail.com"
+                        };
+                        NetworkCredential credential = new NetworkCredential
+                        {  // Server Email credentisal
+                            UserName = "asamoja9100@gmail.com",
+                            Password = "HiddenCheckBackLAter"
+                        };
+                        client.Credentials = credential;
+                        client.EnableSsl = true;
+                        client.Port = 587;
+                        client.Send(msg);
                     }
 
-
-                    SmtpClient client = new SmtpClient
-                    {
-                        Host = "smtp.gmail.com"
-                    };
-                    NetworkCredential credential = new NetworkCredential
-                    {  // Server Email credentisal
-                        UserName = "asamoja9100@gmail.com",
-                        Password = "HiddenCloseYourEyeOle"
-                    };
-                    client.Credentials = credential;
-                    client.EnableSsl = true;
-                    client.Port = 587;
-                    client.Send(msg);
 
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _songRepository.GetAllSongs()) });
                 }
@@ -286,11 +288,11 @@ namespace EarTube.Controllers
                     songModel.SongUrl = songFromDb.SongUrl;
                 }
                 int result = await _songRepository.EditSong(songModel);
-                if(result > 0)
+                if (result > 0)
                 {
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "GetAllSongs", _songRepository.GetAllSongs()) });
                 }
-                
+
             }
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
         }
@@ -532,9 +534,11 @@ namespace EarTube.Controllers
             var accountUserId = data.UserId;
             var userId = _userManager.GetUserId(this.HttpContext.User);
             var userEmail = user.Email;
-            
+            var userFirstName = user.FirstName;
+            var userLastName = user.LastName;
 
-            bool subscribe = await _songRepository.SubscribeRepo(data, accountUserId, userId, userEmail);
+
+            bool subscribe = await _songRepository.SubscribeRepo(data, accountUserId, userId, userEmail, userFirstName, userLastName);
             if (subscribe)
             {
                 return RedirectToAction(nameof(GetSong), new { id = data.Id });
@@ -566,7 +570,7 @@ namespace EarTube.Controllers
             var userId = _userManager.GetUserId(this.HttpContext.User);
             //var userEmail = user.Email;
 
-            bool subscribe = await _songRepository.AccountUserStatus( accountUserId, userId);
+            bool subscribe = await _songRepository.AccountUserStatus(accountUserId, userId);
 
             return subscribe;
         }
