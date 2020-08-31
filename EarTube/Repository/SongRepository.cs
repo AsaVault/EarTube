@@ -455,6 +455,11 @@ namespace EarTube.Repository
             return subscribe;
         }
 
+        public   List<AccountSubscriber> GetSubscriber( string userId)
+        {
+           var subscribers =   _db.AccountSubscriber.Where(x => x.AccountUserId == userId).ToList();
+            return subscribers;
+        }
 
         public List<SongModel> SearchBook(string title, string authorName)
         {
