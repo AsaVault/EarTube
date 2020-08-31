@@ -12,13 +12,17 @@
             <div class="row mb-5">
 
                 <div class="col-md-6">
-                    <img src="@(string.IsNullOrEmpty(song.CoverImageUrl)? "/images/unsplash.jpg": song.CoverImageUrl) " class="img-fluid" style="width:168px; height:94px;" />
+                    <a asp-route="songDetails" asp-route-id="@song.Id">
+                        <img src="@(string.IsNullOrEmpty(song.CoverImageUrl)? "/images/unsplash.jpg": song.CoverImageUrl) " class="img-fluid" style="width:168px; height:94px;" />
+                    </a>
                 </div>
                 <div class="col-md-6">
-                    <p>@song?.Title</p>
-                    <span>@(string.IsNullOrEmpty(song?.User?.FirstName + song?.User?.LastName)? "No username": (song?.User?.FirstName + " " + song?.User?.LastName)) </span>
+                    <p><a asp-route="songDetails" asp-route-id="@song.Id">@song?.Title</a></p>
+                    <a asp-route="getUserAccount" asp-route-accountUserId="@((song.User == null) ? "null" : song.User.Id)">
+                        <span>@(string.IsNullOrEmpty(song?.User?.FirstName + song?.User?.LastName)? "No username": (song?.User?.FirstName + " " + song?.User?.LastName)) </span>
+                    </a>
                     <div id="bottom" class="small">
-                        <span >@((song.SongView > 0) ? song.SongView.ToString() + " Views": "No View.")</span>
+                        <span>@((song.SongView > 0) ? song.SongView.ToString() + " Views": "No View.")</span>
 
                         @{
                             var displayDateTime = "";

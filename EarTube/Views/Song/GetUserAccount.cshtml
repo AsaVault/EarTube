@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SongModel>
+@{
+    ViewData["Title"] = "GetUserAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row col-md-12" id="view-all">
+    @* Inserted Partial view all *@
+    @{
+        var model = Model.FirstOrDefault();
+        <div class="row col-md-12">
+            <div class="image">
+                <img src="@(string.IsNullOrEmpty(model?.User?.UserImageUrl) ? "/images/Avatar.png" : model.User.UserImageUrl)" class="img-fluid" style="width: 1080px; height: 400px;" />
+            </div>
+        </div>
+
+        <div class="row p-4 col-md-12 d-flex  align-items-center">
+            <div class="col-md-1 ml-1">
+                <a asp-route="getUserAccount" asp-route-accountUserId="@((model.User == null) ? "null" : model.User.Id)">
+                    <img src="@(string.IsNullOrEmpty(model?.User?.UserImageUrl) ? "/images/Avatar.png" : model.User.UserImageUrl)" class="img-fluid" style="border-radius:50%; width: 36px; height: 36px;" />
+                </a>
+            </div>
+            <div class="col-md-8">
+                <a asp-route="getUserAccount" asp-route-accountUserId="@((model.User == null) ? "null" : model.User.Id)">
+                    <span class="d-block text-capitalize">@((model.User != null) ? model.User.FirstName + " " + model.User.LastName : "No Account User")</span>
+                </a>
+                <span class="d-block text-capitalize">@((model.User != null && model.User.Subscriber > 0) ? model.User.Subscriber.ToString() + " Subscribers" : "No Subscriber"  ) </span>
+            </div>
+            <div class="col-md-2">
+                <a id="subscribeButton"
+                   asp-route="subscribe" asp-route-id="@((model.User == null) ? 0 : model.Id)"
+                   data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+                   class="btn @((ViewBag.IsSubscribe)? "btn-secondary": "btn-danger") subscribeButton">
+                    @((ViewBag.IsSubscribe)? "Unsubscribe": "Subscribe")
+                </a>
+            </div>
+        </div>
+    }
+    <div class="row mt-3">
+        @if (Model.Count() > 0)
+        {
+            @await Html.PartialAsync("_ViewAll", Model)
+            @*<partial name="_ViewAll" model="Model" />*@
+        }
+        else
+        {
+            <p>No songs</p>
+        }
+    </div>
+</div>
+
+
+
+
+
+

@@ -116,7 +116,7 @@ namespace EarTube.Repository
         public async Task<List<SongModel>> GetSongByUser(string userId)
         {
 
-            return await _db.Song.Include(a => a.User).Where(s => s.UserId == userId)
+            return await _db.Song.Where(s => s.UserId == userId).Include(a => a.User)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,
@@ -333,6 +333,27 @@ namespace EarTube.Repository
             }
             return subscribe;
         }
+
+        //Check Account Subscribe status 
+        public async Task<bool> AccountUserStatus(string accountUserId, string userId)
+        {
+            var subscribe = false;
+            var userSubscribe = await _db.AccountSubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.SubscribeUserId == userId);
+            if (userSubscribe)
+            {
+                subscribe = true;
+            }
+            else
+            {
+                var userUnsubscribe = await _db.AccountUnsubscriber.AnyAsync(u => u.AccountUserId == accountUserId && u.UnSubscribeUserId == userId);
+                if (userUnsubscribe)
+                {
+                    subscribe = false;
+                }
+            }
+            return subscribe;
+        }
+
 
         //new try 
         public async Task<bool> SubscribeRepo(SongModel model, string accountUserId, string userId, string userEmail)

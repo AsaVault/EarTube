@@ -72,6 +72,21 @@ namespace EarTube.Controllers
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }
 
+        //Get User Account 
+        [Route("user-account/{accountUserId}", Name = "getUserAccount")]
+        public async Task<IActionResult> GetUserAccount(string accountUserId)
+        {
+            //var userId = _userManager.GetUserId(this.HttpContext.User);
+            var datas = await _songRepository.GetSongByUser(accountUserId);
+            ViewBag.IsSubscribe = await CheckSubscribeString(accountUserId);
+            if (datas.Count < 0)
+                return RedirectToAction(nameof(GetAllSongs));
+
+
+            return View(datas);
+            //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
+        }
+
         // Get - AddNewSong
         public ViewResult AddNewSong(/*bool isSuccess = false, int songId = 0*/)
         {
@@ -466,6 +481,19 @@ namespace EarTube.Controllers
             return subscribe;
         }
 
+        //Check Subscribe(string) 
+        public async Task<bool> CheckSubscribeString(string accountUserId)
+        {
+            //var data = await _songRepository.GetSongById(id);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            //var accountUserId = data.UserId;
+            var userId = _userManager.GetUserId(this.HttpContext.User);
+            //var userEmail = user.Email;
+
+            bool subscribe = await _songRepository.AccountUserStatus( accountUserId, userId);
+
+            return subscribe;
+        }
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {
 
