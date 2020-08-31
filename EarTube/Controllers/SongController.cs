@@ -252,7 +252,7 @@ namespace EarTube.Controllers
                     NetworkCredential credential = new NetworkCredential
                     {  // Server Email credentisal
                         UserName = "asamoja9100@gmail.com",
-                        Password = "AsaVault7323"
+                        Password = "HiddenCloseYourEyeOle"
                     };
                     client.Credentials = credential;
                     client.EnableSsl = true;
