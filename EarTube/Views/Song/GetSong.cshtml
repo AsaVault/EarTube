@@ -132,24 +132,40 @@
                 <div class="row ">
                     <div class="row p-4 col-md-12 d-flex  align-items-center">
                         <div class="col-md-1 ml-1">
-                            <img src="@(string.IsNullOrEmpty(Model?.User?.UserImageUrl) ? "/images/Avatar.png" : Model.User.UserImageUrl)" class="img-fluid" style="border-radius:50%; width: 36px; height: 36px;" />
+                            <a asp-route="getUserAccount" asp-route-accountUserId="@((Model.User == null) ? "null" : Model.User.Id)">
+                                <img src="@(string.IsNullOrEmpty(Model?.User?.UserImageUrl) ? "/images/Avatar.png" : Model.User.UserImageUrl)" class="img-fluid" style="border-radius:50%; width: 36px; height: 36px;" />
+                            </a>
                         </div>
                         <div class="col-md-9">
-                            <span class="d-block text-capitalize">@((Model.User != null) ? Model.User.FirstName + " " + Model.User.LastName : "No Account User")</span>
+                            <a asp-route="getUserAccount" asp-route-accountUserId="@((Model.User == null) ? "null" : Model.User.Id)">
+                                <span class="d-block text-capitalize">@((Model.User != null) ? Model.User.FirstName + " " + Model.User.LastName : "No Account User")</span>
+                            </a>
                             <span class="d-block text-capitalize">@((Model.User != null && Model.User.Subscriber > 0) ? Model.User.Subscriber.ToString() + " Subscribers" : "No Subscriber"  ) </span>
                         </div>
                         <div class="col-md-1">
                             @*<a
-                                id="subscribeButton"
-                                asp-route="subscribe" asp-route-id="@Model.Id"
-                                data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
-                                class="btn btn-danger subscribeButton">Subscribe</a>*@
-
-                            <a id="subscribeButton"
-                               asp-route="subscribe" asp-route-id="@Model.Id"
-                               data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
-                               class="btn @((ViewBag.IsSubscribe)? "btn-secondary": "btn-danger") subscribeButton">
-                            @((ViewBag.IsSubscribe)? "Unsubscribe": "Subscribe")</a>
+        id="subscribeButton"
+        asp-route="subscribe" asp-route-id="@Model.Id"
+        data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+        class="btn btn-danger subscribeButton">Subscribe</a>*@
+                            @if (ViewBag.IsSubscribe)
+                            {
+                                <a id="subscribeButton"
+                                   asp-route="subscribe" asp-route-id="@Model.Id"
+                                   data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+                                   class="btn  btn-secondary subscribeButton">
+                                    Unsubscribe
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="subscribeButton"
+                                   asp-route="subscribe" asp-route-id="@Model.Id"
+                                   data-ajax="true" data-ajax-success="AjaxSuccess" data-ajax-complete="AjaxComplete"
+                                   class="btn btn-danger subscribeButton">
+                                    Subscribe
+                                </a>
+                            }
                         </div>
                     </div>
                     <div class="row col-md-10 offset-1">

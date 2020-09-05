@@ -29,6 +29,10 @@
       "files": [
         "jquery.unobtrusive-ajax.min.js"
       ]
+    },
+    {
+      "library": "font-awesome@5.14.0",
+      "destination": "wwwroot/font-awesome/"
     }
   ]
 }

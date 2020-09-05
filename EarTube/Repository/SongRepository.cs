@@ -51,7 +51,7 @@ namespace EarTube.Repository
 
         public async Task<List<SongModel>> HotSongs()
         {
-            return await _db.Song.Include(a => a.User)
+            return await _db.Song.Include(a => a.User).Where(x=>x.SongView >50)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,
@@ -70,7 +70,7 @@ namespace EarTube.Repository
                       SongView = song.SongView,
                       Subscriber = song.Subscriber,
                       FromCreation = song.FromCreation
-                  }).OrderByDescending(song => song.Id).ToListAsync();
+                  }).OrderByDescending(song => song.SongView).ToListAsync();
         }
 
         //Still needed some touch
