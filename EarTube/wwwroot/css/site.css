@@ -144,3 +144,12 @@ a:hover {
     text-decoration: none;
     color: #606060;
 }
+
+.mp3-audio {
+    width: 100%;
+    margin-top: 3px;
+}
+
+audio {
+    width: 100%;
+}
