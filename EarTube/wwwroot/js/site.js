@@ -29,6 +29,7 @@ AjaxPost = form => {
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
                     location.reload();
+
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -58,30 +59,72 @@ $(function () {
 });
 
 
-function AjaxSuccess() {
-
-    var button = $(".subscribeButton");
-    if (button.hasClass("btn-danger")) {
-        button.removeClass("btn-danger");
-        button.addClass("btn-secondary");
-        button.text("Unsubscribe");
-    } else {
-
-        button.removeClass("btn-secondary");
-        button.addClass("btn-danger");
-        button.text("Subscribe");
-    }
-    
-
+function AjaxSucce() {
     location.reload();
-
-    
 };
 
 function AjaxComplete() {
-    
+    $.notify("Successful", "success",
+        {
+            position: "bottom center",
+            autoHideDelay: 5000
+        }
+    );
+};
+
+function AjaxLike() {
+    $(".AjaxLike").notify(
+        "I like this song", "success",
+        {
+            position: "bottom center",
+            autoHideDelay: 5000
+        }
+    );
+    setTimeout(function () {
+        location.reload();
+    }, 1000);
+
 }
 
+function AjaxDislike() {
+    $(".AjaxDislike").notify(
+        "I dislike this song", "success",
+        {
+            position: "bottom center",
+            autoHideDelay: 5000
+        }
+    );
+    setTimeout(function () {
+        location.reload();
+    }, 1000);
+}
+
+function LikeThis() {
+    $(".LikeThis").notify(
+        "I like this", "success",
+        {
+            position: "bottom center",
+            autoHideDelay: 1000
+        }
+    );
+    setTimeout(function () {
+        location.reload();
+    }, 1000);
+
+}
+
+function DislikeThis() {
+    $(".DislikeThis").notify(
+        "I dislike this", "success",
+        {
+            position: "bottom center",
+            autoHideDelay: 1000
+        }
+    );
+    setTimeout(function () {
+        location.reload();
+    }, 1000);
+}
 
 //Show more less scripts
 
@@ -138,19 +181,19 @@ $(document).ready(function () {
         return false;
     });
 
-    $(".subscribeButto").click(function () {
-        if ($(this).hasClass("btn-danger")) {
-            $(this).removeClass("btn-danger");
-            $(this).addClass("btn-secondary");
-            $(this).text("Unsubscribe");
-        } else {
+    //$(".subscribeButto").click(function () {
+    //    if ($(this).hasClass("btn-danger")) {
+    //        $(this).removeClass("btn-danger");
+    //        $(this).addClass("btn-secondary");
+    //        $(this).text("Unsubscribe");
+    //    } else {
 
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-danger");
-            $(this).text("Subscribe");
-        }
-        $(this).prev().toggle();
-        $(this).prev().toggle();
-        return false;
-    });
+    //        $(this).removeClass("btn-secondary");
+    //        $(this).addClass("btn-danger");
+    //        $(this).text("Subscribe");
+    //    }
+    //    $(this).prev().toggle();
+    //    $(this).prev().toggle();
+    //    return false;
+    //});
 });
