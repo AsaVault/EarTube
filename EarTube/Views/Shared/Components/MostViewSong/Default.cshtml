@@ -23,50 +23,7 @@
                     </a>
                     <div id="bottom" class="small">
                         <span>@((song.SongView > 0) ? song.SongView.ToString() + " Views": "No View.")</span>
-
-                        @{
-                            var displayDateTime = "";
-                            if (song.CreatedOn.HasValue)
-                            {
-                                var time = DateTime.Now - song.CreatedOn.Value;
-
-
-
-                                if (time.TotalSeconds < 60)
-                                {
-                                    displayDateTime = Convert.ToInt32(time.TotalSeconds).ToString() + " Seconds ago";
-                                }
-                                else
-                                {
-                                    if (time.TotalMinutes < 60)
-                                    {
-                                        displayDateTime = Convert.ToInt32(time.TotalMinutes).ToString() + " Minutes ago";
-                                    }
-                                    else
-                                    {
-                                        if (time.TotalHours < 24)
-                                        {
-                                            displayDateTime = Convert.ToInt32(time.TotalHours).ToString() + " Hours ago";
-                                        }
-                                        else
-                                        {
-                                            if (time.TotalDays < 29)
-                                            {
-                                                displayDateTime = Convert.ToInt32(time.TotalDays).ToString() + " Days ago";
-                                            }
-                                            else
-                                            {
-                                                if (time.TotalDays > 28 && time.TotalDays < 32)
-                                                {
-                                                    displayDateTime = "1 Month ago";
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            <span> @displayDateTime</span>
-                        }
+                        <span> @(string.IsNullOrEmpty(song.CalculateTime)? "No time": song.CalculateTime)</span>
                     </div>
                 </div>
             </div>

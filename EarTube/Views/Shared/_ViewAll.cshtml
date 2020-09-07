@@ -1,5 +1,4 @@
-﻿@*@model SongModel*@
-@model IEnumerable<SongModel>
+﻿@model IEnumerable<SongModel>
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -24,49 +23,7 @@
                         <span class="card-text text-muted m-0 text-capitalize d-block">@(string.IsNullOrEmpty(song?.User?.FirstName + song?.User?.LastName)? "No username": (song?.User?.FirstName + " " + song?.User?.LastName)) </span>
                     </a>
                     <span class="card-text text-muted pr-md-2 ">@((song.SongView > 0) ? song.SongView.ToString() + " Views": "No View.")</span>
-                    @{
-                        var displayDateTime = "";
-                        if (song.CreatedOn.HasValue)
-                        {
-                            var time = DateTime.Now - song.CreatedOn.Value;
-
-
-
-                            if (time.TotalSeconds < 60)
-                            {
-                                displayDateTime = Convert.ToInt32(time.TotalSeconds).ToString() + " Seconds ago";
-                            }
-                            else
-                            {
-                                if (time.TotalMinutes < 60)
-                                {
-                                    displayDateTime = Convert.ToInt32(time.TotalMinutes).ToString() + " Minutes ago";
-                                }
-                                else
-                                {
-                                    if (time.TotalHours < 24)
-                                    {
-                                        displayDateTime = Convert.ToInt32(time.TotalHours).ToString() + " Hours ago";
-                                    }
-                                    else
-                                    {
-                                        if (time.TotalDays < 29)
-                                        {
-                                            displayDateTime = Convert.ToInt32(time.TotalDays).ToString() + " Days ago";
-                                        }
-                                        else
-                                        {
-                                            if (time.TotalDays > 28 && time.TotalDays < 32)
-                                            {
-                                                displayDateTime = "1 Month ago";
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    <span class="card-text text-muted ">@(string.IsNullOrEmpty(displayDateTime)? "No time":displayDateTime) </span>
+                    <span class="card-text text-muted ">@(string.IsNullOrEmpty(song.CalculateTime)? "No time": song.CalculateTime) </span>
                 </div>
             </div>
         </div>

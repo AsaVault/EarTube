@@ -47,7 +47,7 @@ namespace EarTube.Models
         public string SongUrl { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-
+        public string CalculateTime { get; set; }
 
 
     }

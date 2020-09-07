@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200828173633_UserSubscribe.cs" />
     <Compile Remove="Migrations\20200828173633_UserSubscribe.Designer.cs" />
+    <Compile Remove="Migrations\20200905171421_DateTimeNullableChanged.cs" />
+    <Compile Remove="Migrations\20200905171421_DateTimeNullableChanged.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

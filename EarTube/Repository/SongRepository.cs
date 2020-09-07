@@ -45,13 +45,13 @@ namespace EarTube.Repository
                      Subscriber = song.Subscriber,
                      FromCreation = song.FromCreation
                  }).OrderByDescending(song => song.Id).ToListAsync();
-
+            
             return data;
         }
 
         public async Task<List<SongModel>> HotSongs()
         {
-            return await _db.Song.Include(a => a.User).Where(x=>x.SongView >50)
+            return await _db.Song.Include(a => a.User).Where(x => x.SongView > 50)
                   .Select(song => new SongModel()
                   {
                       Title = song.Title,
@@ -145,7 +145,7 @@ namespace EarTube.Repository
                 Title = model.Title,
                 Artist = model.Artist,
                 Genre = model.Genre,
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
                 Description = model.Description,
                 Id = model.Id,
                 Like = model.Like,
@@ -186,7 +186,7 @@ namespace EarTube.Repository
             newSong.Description = model.Description;
             newSong.SongUrl = model.SongUrl;
             newSong.CoverImageUrl = model.CoverImageUrl;
-            
+
             _db.Song.Update(newSong);
             await _db.SaveChangesAsync();
             return newSong.Id;
@@ -312,7 +312,7 @@ namespace EarTube.Repository
             return dislikeSong;
         }
 
-      
+
 
         //Check Subscribe status 
         public async Task<bool> SubscribeStatus(SongModel model, string accountUserId, string userId, string userEmail)
@@ -455,10 +455,60 @@ namespace EarTube.Repository
             return subscribe;
         }
 
-        public   List<AccountSubscriber> GetSubscriber( string userId)
+        public List<AccountSubscriber> GetSubscriber(string userId)
         {
-           var subscribers =   _db.AccountSubscriber.Where(x => x.AccountUserId == userId).ToList();
+            var subscribers = _db.AccountSubscriber.Where(x => x.AccountUserId == userId).ToList();
             return subscribers;
+        }
+
+        public string CalculateTime(DateTime createdOn)
+        {
+            var displayDateTime = "";
+            if (createdOn != null)
+            {
+                var time = DateTime.Now - createdOn;
+                if ((time.TotalMilliseconds / 1000) <= 1)
+                {
+                    displayDateTime = Convert.ToInt32((time.TotalMilliseconds / 1000)).ToString() + " Second ago";
+                }
+                else
+                {
+                    if (time.TotalSeconds < 60)
+                    {
+                        displayDateTime = Convert.ToInt32(time.TotalSeconds).ToString() + " Seconds ago";
+                    }
+                    else
+                    {
+                        if (time.TotalMinutes < 60)
+                        {
+                            displayDateTime = Convert.ToInt32(time.TotalMinutes).ToString() + " Minutes ago";
+                        }
+                        else
+                        {
+                            if (time.TotalHours < 24)
+                            {
+                                displayDateTime = Convert.ToInt32(time.TotalHours).ToString() + " Hours ago";
+                            }
+                            else
+                            {
+                                if (time.TotalDays < 29)
+                                {
+                                    displayDateTime = Convert.ToInt32(time.TotalDays).ToString() + " Days ago";
+                                }
+                                else
+                                {
+                                    if (time.TotalDays > 28 && time.TotalDays < 32)
+                                    {
+                                        displayDateTime = "1 Month ago";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return displayDateTime;
+            }
+            return "NA";
         }
 
         public List<SongModel> SearchBook(string title, string authorName)

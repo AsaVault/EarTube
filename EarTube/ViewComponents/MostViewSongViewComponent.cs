@@ -19,6 +19,11 @@ namespace EarTube.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var mostView = await _repo.HotSongs();
+
+            foreach (var data in mostView)
+            {
+                data.CalculateTime = _repo.CalculateTime(data.CreatedOn.GetValueOrDefault());
+            }
             return View(mostView);
         }
     }
