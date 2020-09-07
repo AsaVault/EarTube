@@ -28,13 +28,13 @@
                 <span id="buttons" class="p-1">
                     <span class="text-muted LikeThis">
                         <a asp-route="likeComment" asp-route-id="@comment.Id"
-                           data-ajax="true" data-ajax-success="LikeThis" data-ajax-complete="AjaxSuccess"
+                           data-ajax="true" data-ajax-success="LikeThis"
                            class="pl-1"><i class="fas fa-thumbs-up"><span class="px-2  ">@comment.CommentLikes.ToString()</span></i></a>
                     </span>
 
                     <span class="text-muted DislikeThis">
                         <a asp-route="dislikeComment" asp-route-id="@comment.Id"
-                           data-ajax="true" data-ajax-success="DislikeThis" data-ajax-complete="AjaxSuccess"
+                           data-ajax="true" data-ajax-success="DislikeThis"
                            class="pl-1 @((UserManager.GetUserId(User).ToString() != Model.UserId)? " ": "btn disabled")"><i class="fas fa-thumbs-down"><span class="px-2">@comment.CommentDisikes.ToString()</span></i></a>
                     </span>
 

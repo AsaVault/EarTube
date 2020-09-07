@@ -59,7 +59,7 @@ $(function () {
 });
 
 
-function AjaxSucce() {
+function AjaxSuccess() {
     location.reload();
 };
 
