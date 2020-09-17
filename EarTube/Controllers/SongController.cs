@@ -235,35 +235,35 @@ namespace EarTube.Controllers
 
                     //#region Mail
 
-                    //MailMessage msg = new MailMessage  // instance Mail sender service
-                    //{
-                    //    From = new MailAddress("asamoja9100@gmail.com"),  // Server Email Address
-                    //};
+                    MailMessage msg = new MailMessage  // instance Mail sender service
+                    {
+                        From = new MailAddress("asamoja9100@gmail.com"),  // Server Email Address
+                    };
 
-                    //var subscribers = _songRepository.GetSubscriber(userId);
-                    //if (subscribers.Count() > 0)
-                    //{
-                    //    foreach (var subscriber in subscribers)
-                    //    {
-                    //        msg.To.Add(subscriber.SubscribeUserEmail); // receiver Email
+                    var subscribers = _songRepository.GetSubscriber(userId);
+                    if (subscribers.Count() > 0)
+                    {
+                        foreach (var subscriber in subscribers)
+                        {
+                            msg.To.Add(subscriber.SubscribeUserEmail); // receiver Email
 
-                    //        msg.Subject = "EarTube - New Song Upload";
-                    //        msg.Body = $"Hello {subscriber.SubscriberFirstName} {subscriber.SubscriberLastName}, {user.FirstName}-{user.LastName}  as added a new song. Go check it out";  // Message Body
-                    //    }
-                    //    SmtpClient client = new SmtpClient
-                    //    {
-                    //        Host = "smtp.gmail.com"
-                    //    };
-                    //    NetworkCredential credential = new NetworkCredential
-                    //    {  // Server Email credentisal
-                    //        UserName = "asamoja9100@gmail.com",
-                    //        Password = "HiddenCheckBackLAter"
-                    //    };
-                    //    client.Credentials = credential;
-                    //    client.EnableSsl = true;
-                    //    client.Port = 587;
-                    //    client.Send(msg);
-                    //}
+                            msg.Subject = "EarTube - New Song Upload";
+                            msg.Body = $"Hello {subscriber.SubscriberFirstName} {subscriber.SubscriberLastName}, {user.FirstName}-{user.LastName}  as added a new song. Go check it out";  // Message Body
+                        }
+                        SmtpClient client = new SmtpClient
+                        {
+                            Host = "smtp.gmail.com"
+                        };
+                        NetworkCredential credential = new NetworkCredential
+                        {  // Server Email credentisal
+                            UserName = "asamoja9100@gmail.com",
+                            Password = "Hidden"
+                        };
+                        client.Credentials = credential;
+                        client.EnableSsl = true;
+                        client.Port = 587;
+                        client.Send(msg);
+                    }
 
 
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _songRepository.GetAllSongs()) });
