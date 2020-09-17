@@ -6,24 +6,29 @@ using EarTube.Helpers;
 using EarTube.Models;
 using EarTube.Repository;
 using EarTube.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace EarTube.Controllers
 {
+    [Authorize]
     public class CommentController : Controller
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly CommentRepository _comment;
+        private readonly ILogger<CommentController> _logger;
 
-
-        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, CommentRepository comment)
+        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, CommentRepository comment, ILogger<CommentController> logger)
         {
             _db = db;
             _userManager = userManager;
             _comment = comment;
+            _logger = logger;
         }
         public IActionResult GetCommentById(int id)
         {
@@ -55,19 +60,27 @@ namespace EarTube.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AddComment(Comment comment, bool isSuccess = false)
         {
-            var userId = _userManager.GetUserId(this.HttpContext.User);
-            comment.UserId = userId;
-
-            if (ModelState.IsValid)
+            try
             {
-                _comment.AddNewComment(comment);
-                _comment.Save();
-                //comment.Description = " ";
-                ViewBag.IsSuccess = isSuccess;
-                TempData["Alert"] = true;
+                var userId = _userManager.GetUserId(this.HttpContext.User);
+                comment.UserId = userId;
 
-                //Adding Json here
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_AddComment", _db.Comment.ToListAsync()) });
+                if (ModelState.IsValid)
+                {
+                    _comment.AddNewComment(comment);
+                    _comment.Save();
+                    //comment.Description = " ";
+                    ViewBag.IsSuccess = isSuccess;
+                    TempData["Alert"] = true;
+
+                    //Adding Json here
+                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_AddComment", _db.Comment.ToListAsync()) });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
             }
             // JSON Return
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "_AddComment", comment) });
@@ -106,6 +119,7 @@ namespace EarTube.Controllers
 
         public async Task<IActionResult> LikeComment(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();

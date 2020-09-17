@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace EarTube.Controllers
 {
-    [Authorize]
+    
     public class SongController : Controller
     {
         private readonly SongRepository _songRepository = null;
@@ -59,7 +59,7 @@ namespace EarTube.Controllers
 
 
         //Get Song by UserId
-
+        [Authorize]
         public async Task<IActionResult> GetSongByUser(/*bool isSuccess, int songId*/)
 
         {
@@ -75,6 +75,7 @@ namespace EarTube.Controllers
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }
 
+        [Authorize]
         //Get User Account 
         [Route("user-account/{accountUserId}", Name = "getUserAccount")]
         public async Task<IActionResult> GetUserAccount(string accountUserId)
@@ -90,6 +91,7 @@ namespace EarTube.Controllers
             //return RedirectToAction(datas, new { isSuccess = true, songId = datas.Count() });
         }
 
+        [Authorize]
         // Get - AddNewSong
         public ViewResult AddNewSong(/*bool isSuccess = false, int songId = 0*/)
         {
@@ -98,7 +100,7 @@ namespace EarTube.Controllers
             //ViewBag.SongId = songId;
             return View(model);
         }
-
+        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AddNewSong(SongModel songModel, bool isSuccess = false, int songId = 0)
@@ -171,6 +173,7 @@ namespace EarTube.Controllers
             return View();
         }
 
+        [Authorize]
         //AddOrEdit Action Method
         public async Task<IActionResult> AddOrEdit(int? songId = 0, bool isSuccess = false)
         {
@@ -197,6 +200,7 @@ namespace EarTube.Controllers
         }
 
         //Post AddOrEdit/id
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(SongModel songModel, bool isSuccess = false, int songId = 0)
@@ -298,7 +302,7 @@ namespace EarTube.Controllers
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", songModel) });
         }
 
-
+        [Authorize]
         [Route("song-details/{id}", Name = "songDetails")]
         public async Task<ViewResult> GetSong(int id, bool isSuccess)
         {
@@ -324,6 +328,7 @@ namespace EarTube.Controllers
             return View(data);
         }
 
+        [Authorize]
         [Route("edit-song/{id}", Name = "editSong")]
         public async Task<IActionResult> EditSong(int? id, bool isSuccess = false)
         {
@@ -343,6 +348,7 @@ namespace EarTube.Controllers
             return View(data);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSong(SongModel songModel)
@@ -371,6 +377,7 @@ namespace EarTube.Controllers
             return View();
         }
 
+        [Authorize]
         [Route("delete-song/{id}", Name = "deleteSong")]
 
         public async Task<IActionResult> DeleteSong(int? id, bool isSuccess = false)
@@ -393,6 +400,7 @@ namespace EarTube.Controllers
             return NotFound();
         }
 
+        [Authorize]
         //Youtube Like song
         [Route("youtube-like-song/{id}", Name = "youtubeLikeSong")]
 
@@ -422,6 +430,7 @@ namespace EarTube.Controllers
 
         //Youtube Dislike song logic
         //Youtube Like song
+        [Authorize]
         [Route("youtube-dislike-song/{id}", Name = "youtubeDislikeSong")]
 
         public async Task<IActionResult> YoutubeDislikeSong(int? id)
@@ -448,6 +457,7 @@ namespace EarTube.Controllers
         }
 
         //Like Song New
+        [Authorize]
         [Route("like-song/{id}", Name = "likeSong")]
 
         public async Task<IActionResult> LikeSong(int? id)
@@ -473,7 +483,7 @@ namespace EarTube.Controllers
         }
 
         //UserSongLikeFormer
-
+        [Authorize]
         public async Task<IActionResult> UserSongLike(int? id)
         {
             if (id == null)
@@ -495,6 +505,7 @@ namespace EarTube.Controllers
         }
 
         //Song Dislike
+        [Authorize]
         [Route("dislike-song/{id}", Name = "dislikeSong")]
 
         public async Task<IActionResult> DislikeSong(int? id)
@@ -520,6 +531,7 @@ namespace EarTube.Controllers
             return RedirectToAction(nameof(GetSong), new { id = data.Id });
         }
 
+        [Authorize]
         [Route("subscribe-account/{id}", Name = "subscribe")]
         public async Task<IActionResult> SubscribeGet(int? id)
         {
@@ -548,6 +560,7 @@ namespace EarTube.Controllers
         }
 
 
+        [Authorize]
         //Check Subscribe
         public async Task<bool> CheckSubscribe(int? id)
         {
@@ -563,6 +576,7 @@ namespace EarTube.Controllers
         }
 
         //Check Subscribe(string) 
+        [Authorize]
         public async Task<bool> CheckSubscribeString(string accountUserId)
         {
             //var data = await _songRepository.GetSongById(id);
@@ -575,9 +589,10 @@ namespace EarTube.Controllers
 
             return subscribe;
         }
+
+        [Authorize]
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {
-
             folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
 
             string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
