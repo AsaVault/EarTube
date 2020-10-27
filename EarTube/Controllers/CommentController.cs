@@ -5,7 +5,6 @@ using EarTube.Data;
 using EarTube.Helpers;
 using EarTube.Models;
 using EarTube.Repository;
-using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +19,10 @@ namespace EarTube.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly CommentRepository _comment;
+        private readonly ICommentRepository _comment;
         private readonly ILogger<CommentController> _logger;
 
-        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, CommentRepository comment, ILogger<CommentController> logger)
+        public CommentController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, ICommentRepository comment, ILogger<CommentController> logger)
         {
             _db = db;
             _userManager = userManager;
@@ -32,9 +31,9 @@ namespace EarTube.Controllers
         }
         public IActionResult GetCommentById(int id)
         {
-            
-            var data =  _comment.CommentById(id);
-            
+
+            var data = _comment.CommentById(id);
+
             return View(data);
         }
 
@@ -42,17 +41,18 @@ namespace EarTube.Controllers
         //Old logic
         public async Task<IActionResult> RepoGetCommentById(int id)
         {
-
             var data = await _db.Comment.Where(c => c.SongId == id).ToListAsync();
 
             return View(data);
         }
 
+        [HttpGet]
         public IActionResult AddComment(int songId)
         {
-
-            var model = new Comment();
-            model.SongId = songId;
+            var model = new Comment
+            {
+                SongId = songId
+            };
             return View(model);
         }
 

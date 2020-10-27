@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EarTube.Areas.Identity.Data;
 using EarTube.Repository;
-using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,7 +29,8 @@ namespace EarTube
 #endif
             //services.AddTransient<IComment, CommentRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
-            services.AddScoped<SongRepository, SongRepository>();
+            services.AddScoped<ISongRepository, SongRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddTransient<ApplicationUser>();
         }
 

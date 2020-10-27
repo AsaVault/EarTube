@@ -12,15 +12,13 @@ using System.Threading.Tasks;
 
 namespace EarTube.Repository
 {
-    public class SongRepository
+    public class SongRepository : ISongRepository
     {
 
         private readonly ApplicationDbContext _db;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public SongRepository(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public SongRepository(ApplicationDbContext db)
         {
             _db = db;
-            _userManager = userManager;
         }
 
         public async Task<List<SongModel>> GetAllSongs()
@@ -45,7 +43,7 @@ namespace EarTube.Repository
                      Subscriber = song.Subscriber,
                      FromCreation = song.FromCreation
                  }).OrderByDescending(song => song.Id).ToListAsync();
-            
+
             return data;
         }
 
@@ -511,7 +509,7 @@ namespace EarTube.Repository
             return "NA";
         }
 
-        public List<SongModel> SearchBook(string title, string authorName)
+        public List<SongModel> SearchSong(string title, string authorName)
         {
             return null;
         }

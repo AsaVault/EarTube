@@ -2,7 +2,6 @@
 using EarTube.Areas.Identity.Data;
 using EarTube.Data;
 using EarTube.Repository;
-using EarTube.Repository.IRepository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;

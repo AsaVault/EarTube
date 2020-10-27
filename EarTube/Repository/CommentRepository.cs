@@ -1,6 +1,5 @@
 ﻿using EarTube.Data;
 using EarTube.Models;
-using EarTube.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 namespace EarTube.Repository
 {
 
-    public class CommentRepository 
+    public class CommentRepository : ICommentRepository
     {
         private readonly ApplicationDbContext _db;
         public CommentRepository(ApplicationDbContext db)
@@ -20,18 +19,18 @@ namespace EarTube.Repository
 
         public async void AddNewComment(Comment comment)
         {
-           await _db.Comment.AddAsync(comment);
+            await _db.Comment.AddAsync(comment);
         }
 
-        public  Comment CommentById(int? id)
+        public Comment CommentById(int? id)
         {
-            return  _db.Comment.FirstOrDefault(x => x.Id == id);
+            return _db.Comment.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<bool> CommentDislike(Comment model, string userId)
         {
             var dislikeComment = false;
-            var userCommentDislike =  await _db.UserCommentDislike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
+            var userCommentDislike = await _db.UserCommentDislike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);
             if (!userCommentDislike)
             {
                 var newComment = await _db.Comment.FirstOrDefaultAsync(x => x.Id == model.Id);
@@ -49,15 +48,15 @@ namespace EarTube.Repository
                 }
 
                 _db.Comment.Update(newComment);
-               await _db.UserCommentDislike.AddAsync(new UserCommentDislike { UserId = userId, CommentId = model.Id });
-                await  _db.SaveChangesAsync();
+                await _db.UserCommentDislike.AddAsync(new UserCommentDislike { UserId = userId, CommentId = model.Id });
+                await _db.SaveChangesAsync();
 
                 dislikeComment = true;
             }
             return dislikeComment;
         }
 
-        public  async Task<bool> CommentLike(Comment model, string userId)
+        public async Task<bool> CommentLike(Comment model, string userId)
         {
             var likeComment = false;
             var userCommentLike = await _db.UserCommentLike.AnyAsync(u => u.UserId == userId && u.CommentId == model.Id);

@@ -21,12 +21,12 @@ namespace EarTube.Controllers
     
     public class SongController : Controller
     {
-        private readonly SongRepository _songRepository = null;
+        private readonly ISongRepository _songRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SongController(SongRepository songRepository,
+        public SongController(ISongRepository songRepository,
             IWebHostEnvironment webHostEnvironment,
             UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
