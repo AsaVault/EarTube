@@ -136,7 +136,7 @@ namespace EarTube.Controllers
 
                     MailMessage msg = new MailMessage  // instance Mail sender service
                     {
-                        From = new MailAddress("asamoja9100@gmail.com"),  // Server Email Address
+                        From = new MailAddress("asamoja9123@gmail.com"),  // Server Email Address
                     };
 
                     var subscribers = _songRepository.GetSubscriber(userId);
@@ -155,8 +155,8 @@ namespace EarTube.Controllers
                     };
                     NetworkCredential credential = new NetworkCredential
                     {  // Server Email credentisal
-                        UserName = "asamoja9100@gmail.com",
-                        Password = "Hidden"
+                        UserName = "asamoja9123@gmail.com",
+                        Password = "asaVault9123!"
                     };
                     client.Credentials = credential;
                     client.EnableSsl = true;
@@ -236,7 +236,7 @@ namespace EarTube.Controllers
 
                     MailMessage msg = new MailMessage  // instance Mail sender service
                     {
-                        From = new MailAddress("asamoja9100@gmail.com"),  // Server Email Address
+                        From = new MailAddress("asamoja9123@gmail.com"),  // Server Email Address
                     };
 
                     var subscribers = _songRepository.GetSubscriber(userId);
@@ -255,8 +255,8 @@ namespace EarTube.Controllers
                         };
                         NetworkCredential credential = new NetworkCredential
                         {  // Server Email credentisal
-                            UserName = "asamoja9100@gmail.com",
-                            Password = "Hidden"
+                            UserName = "asamoja9123@gmail.com",
+                            Password = "asaVault9123!"
                         };
                         client.Credentials = credential;
                         client.EnableSsl = true;
